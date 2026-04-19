@@ -35,7 +35,7 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
   const { agregarAlCarrito } = useCarrito();
   const navigate = useNavigate();
 
-  // 🔥 IMÁGENES SIN DUPLICADOS
+  // 🖼 IMÁGENES
   const imagenes = useMemo(() => {
     const imgs = [
       producto.imagen,
@@ -47,7 +47,7 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
 
   const [imagenActiva, setImagenActiva] = useState(imagenes[0] || "");
 
-  // 🔥 STOCK REAL DESDE VARIANTES
+  // 📦 STOCK
   const stockTotal = useMemo(() => {
     if (!producto.variantes || producto.variantes.length === 0) return 1;
     return producto.variantes.reduce((acc, v) => acc + (v.stock || 0), 0);
@@ -59,6 +59,19 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
     (v) => v.stock > 0
   );
 
+  // 💰 PRECIO DINÁMICO (mínimo si hay variantes)
+  const precioMinimo = useMemo(() => {
+    if (!tieneVariantes) return producto.precio;
+
+    const precios = producto.variantes
+      .map((v) => v.precio)
+      .filter(Boolean);
+
+    return precios.length > 0
+      ? Math.min(...precios)
+      : producto.precio;
+  }, [producto, tieneVariantes]);
+
   // 🛒 AGREGAR
   const onAdd = async () => {
     if (!isAuthenticated) {
@@ -67,9 +80,8 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
       return;
     }
 
-    // 🔥 SI TIENE VARIANTES → IR A DETALLE
     if (tieneVariantes) {
-      toast.info("Selecciona talla y color 👇");
+      toast.info("Selecciona opciones 👇");
 
       if (onVerDetalle) {
         onVerDetalle();
@@ -81,14 +93,13 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
       return;
     }
 
-    // 🔥 PRODUCTO SIN VARIANTES
     if (onAgregar) {
       onAgregar(producto);
       return;
     }
 
     try {
-      await agregarAlCarrito(producto.id, null, 1); // ✅ CORRECTO
+      await agregarAlCarrito(producto.id, null, 1);
       toast.success(`${producto.nombre} agregado al carrito ✅`);
     } catch (e) {
       toast.error(e.message || "Error al agregar");
@@ -97,7 +108,7 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
 
   return (
     <Card sx={cardSx} elevation={0}>
-      {/* Imagen */}
+      {/* IMAGEN */}
       <Box sx={imagenBoxSx}>
         <Box
           component="img"
@@ -117,7 +128,7 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
         )}
       </Box>
 
-      {/* Miniaturas */}
+      {/* MINIATURAS */}
       {imagenes.length > 1 && (
         <Stack
           direction="row"
@@ -147,33 +158,28 @@ export default function ProductoCard({ producto, onVerDetalle, onAgregar }) {
         </Stack>
       )}
 
-      {/* Contenido */}
+      {/* CONTENIDO */}
       <Box sx={contenidoSx}>
         <Typography variant="h6" fontWeight="bold" sx={tituloSx}>
           {producto.nombre}
         </Typography>
 
-        {/* 🔥 INDICADOR VARIANTES */}
-        {tieneVariantes && (
-          <Chip
-            label="Seleccionar talla/color"
-            color="info"
-            size="small"
-            sx={{ mb: 1 }}
-          />
-        )}
-
-        {/* Precio */}
-        <Stack direction="row" alignItems="center" spacing={0.5} sx={precioStackSx}>
+        {/* 💰 PRECIO */}
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={0.5}
+          sx={precioStackSx}
+        >
           <MonetizationOnIcon color="primary" />
           <Typography variant="h6" color="primary" fontWeight="bold">
-            ${producto.precio}
+            {tieneVariantes ? `Desde $${precioMinimo}` : `$${producto.precio}`}
           </Typography>
         </Stack>
 
         <Divider sx={dividerSx} />
 
-        {/* Botones */}
+        {/* BOTONES */}
         <Stack spacing={1}>
           <Button
             variant="contained"
