@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useState, useEffect, useMemo } from "react";
 import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
@@ -72,6 +73,9 @@ export default function DetalleModal({
     (v) => v.stock > 0
   );
 
+  const precioActual =
+    varianteSeleccionada?.precio ?? producto.precio;
+
   const handleAgregar = async () => {
     if (!isAuthenticated) {
       toast.warn("Debes iniciar sesión");
@@ -124,6 +128,18 @@ export default function DetalleModal({
           />
         </Box>
 
+        {/* 💰 PRECIO DESTACADO */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <AttachMoneyIcon color="success" />
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="success.main"
+          >
+            {precioActual}
+          </Typography>
+        </Stack>
+
         {/* MINIATURAS */}
         {imagenes.length > 1 && (
           <Stack direction="row" spacing={1}>
@@ -160,7 +176,7 @@ export default function DetalleModal({
           </Typography>
         </Box>
 
-        {/* 🔥 VARIANTES */}
+        {/* VARIANTES */}
         {tieneVariantes && (
           <Stack spacing={2} alignItems="center">
             <Typography fontWeight="bold">
@@ -210,22 +226,7 @@ export default function DetalleModal({
                       },
                     }}
                   >
-                    {/* 👇 CONTENIDO CON PRECIO */}
-                    <Stack spacing={0.2} alignItems="center" lineHeight={1}>
-                      <Typography fontSize={13}>
-                        {label || "Única"}
-                      </Typography>
-
-                      <Typography
-                        fontSize={12}
-                        fontWeight="bold"
-                        sx={{
-                          color: isSelected ? "#fff" : "#1976d2",
-                        }}
-                      >
-                        ${v.precio ?? producto.precio}
-                      </Typography>
-                    </Stack>
+                    {label || "Única"}
                   </Button>
                 );
               })}
@@ -284,4 +285,4 @@ export default function DetalleModal({
       </Stack>
     </Dialog>
   );
-                      }
+}
