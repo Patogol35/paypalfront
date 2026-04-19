@@ -14,6 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { toast } from "react-toastify";
+import { calcularSubtotal } from "../utils/carritoUtils";
 import carritoItemStyles from "./CarritoItem.styles";
 
 export default function CarritoItem({
@@ -25,21 +26,24 @@ export default function CarritoItem({
 }) {
   if (!it || !it.producto) return null;
 
-  const producto = it.producto || {};
+  const producto = it.producto;
   const variante = it.variante || {};
 
-  const stock = Number(variante.stock ?? producto.stock ?? 0);
-  const precioUnitario = Number(variante.precio ?? producto.precio ?? 0);
-  const cantidad = Number(it.cantidad ?? 1);
+  // 📦 STOCK
+  const stock = variante?.stock ?? producto?.stock ?? 0;
 
-  const subtotal = precioUnitario * cantidad;
+  // 💰 PRECIO UNITARIO
+  const precioUnitario =
+    variante?.precio ?? producto?.precio ?? 0;
 
+  // 🖼 IMAGEN
   const imagen =
     variante?.imagenes?.[0]?.imagen ||
     producto?.imagenes?.[0]?.imagen ||
     producto?.imagen ||
     "/placeholder.png";
 
+  // 🧠 VARIANTE LABEL
   const varianteLabel = [variante.talla, variante.color, variante.modelo]
     .filter(Boolean)
     .join(" - ");
@@ -52,6 +56,7 @@ export default function CarritoItem({
 
   return (
     <Card sx={carritoItemStyles.card}>
+      {/* IMAGEN */}
       <CardMedia
         component="img"
         image={imagen}
@@ -59,6 +64,7 @@ export default function CarritoItem({
         sx={(theme) => carritoItemStyles.media(theme)}
       />
 
+      {/* INFO */}
       <CardContent sx={carritoItemStyles.content}>
         <Box>
           <Typography variant="h6" fontWeight="bold">
@@ -71,7 +77,7 @@ export default function CarritoItem({
             </Typography>
           )}
 
-          {/* 💰 PRECIO */}
+          {/* 💰 PRECIO UNITARIO */}
           <Stack direction="row" spacing={1} alignItems="center" mt={1}>
             <MonetizationOnIcon fontSize="small" color="primary" />
             <Typography variant="body2" fontWeight="bold">
@@ -80,11 +86,17 @@ export default function CarritoItem({
           </Stack>
         </Box>
 
-        {/* SUBTOTAL */}
+        {/* 🔥 SUBTOTAL (VOLVIMOS A LA FUNCIÓN ORIGINAL) */}
         <Stack direction="row" spacing={1}>
           <Chip
-            label={`Subtotal: $${subtotal.toFixed(2)}`}
+            label={`Subtotal: $${calcularSubtotal(it).toFixed(2)}`}
             color="success"
+            sx={carritoItemStyles.chipSubtotal}
+          />
+
+          <Chip
+            label={`Stock: ${stock}`}
+            color={stock > 0 ? "info" : "default"}
           />
         </Stack>
       </CardContent>
@@ -94,7 +106,7 @@ export default function CarritoItem({
         <Box sx={carritoItemStyles.cantidadWrapper}>
           <IconButton
             onClick={() => decrementar(it)}
-            disabled={cantidad <= 1}
+            disabled={it.cantidad <= 1}
           >
             <RemoveIcon />
           </IconButton>
@@ -102,7 +114,7 @@ export default function CarritoItem({
           <TextField
             type="number"
             size="small"
-            value={cantidad}
+            value={it.cantidad}
             inputProps={{ min: 1, max: stock }}
             onChange={(e) => {
               const val = Number(e.target.value);
@@ -125,13 +137,13 @@ export default function CarritoItem({
 
           <IconButton
             onClick={() => incrementar(it)}
-            disabled={cantidad >= stock}
+            disabled={it.cantidad >= stock}
           >
             <AddIcon />
           </IconButton>
         </Box>
 
-        {/* 🟥 BOTÓN ELIMINAR PRO */}
+        {/* 🟥 ELIMINAR PRO */}
         <IconButton
           onClick={handleEliminar}
           sx={{
