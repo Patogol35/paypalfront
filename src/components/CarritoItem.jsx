@@ -18,27 +18,27 @@ import carritoItemStyles from "./CarritoItem.styles";
 
 export default function CarritoItem({
   it,
-  theme,
   incrementar,
   decrementar,
   setCantidad,
   eliminarItem,
 }) {
-  // 🔥 STOCK REAL (VARIANTE > PRODUCTO)
   const stock = it.variante?.stock ?? 0;
 
-  // =========================
-  // 🖼 IMAGEN DINÁMICA
-  // =========================
   const imagen =
-    it.variante?.imagenes?.[0]?.imagen || // 🔥 variante primero
-    it.producto?.imagenes?.[0]?.imagen || // luego imágenes producto
-    it.producto?.imagen || // fallback principal
-    "/placeholder.png"; // último fallback
+    it.variante?.imagenes?.[0]?.imagen ||
+    it.producto?.imagenes?.[0]?.imagen ||
+    it.producto?.imagen ||
+    "/placeholder.png";
 
   const altTexto = it.variante
     ? `${it.producto?.nombre} ${it.variante.color || ""}`
     : it.producto?.nombre;
+
+  const handleEliminar = () => {
+    eliminarItem(it.id);
+    toast.info("🗑 Producto eliminado del carrito");
+  };
 
   return (
     <Card sx={carritoItemStyles.card}>
@@ -57,7 +57,7 @@ export default function CarritoItem({
             {it.producto?.nombre}
           </Typography>
 
-          {/* 🔥 VARIANTE */}
+          {/* VARIANTE */}
           {it.variante && (
             <Typography variant="body2" color="text.secondary">
               {it.variante.talla && `Talla: ${it.variante.talla}`}{" "}
@@ -80,13 +80,11 @@ export default function CarritoItem({
             icon={<MonetizationOnIcon />}
             label={`$${calcularSubtotal(it).toFixed(2)}`}
             color="success"
-            sx={carritoItemStyles.chipSubtotal}
           />
 
           <Chip
-            label={`Stock: ${stock}`}
-            color={stock > 0 ? "info" : "default"}
-            sx={carritoItemStyles.chipStock}
+            label={stock > 0 ? `Stock: ${stock}` : "Agotado"}
+            color={stock > 0 ? "info" : "error"}
           />
         </Box>
       </CardContent>
@@ -97,8 +95,7 @@ export default function CarritoItem({
           {/* RESTAR */}
           <IconButton
             onClick={() => decrementar(it)}
-            disabled={it.cantidad <= 1}
-            sx={carritoItemStyles.botonCantidad}
+            disabled={it.cantidad <= 1 || stock === 0}
           >
             <RemoveIcon />
           </IconButton>
@@ -108,6 +105,7 @@ export default function CarritoItem({
             type="number"
             size="small"
             value={it.cantidad}
+            disabled={stock === 0}
             inputProps={{ min: 1, max: stock }}
             onChange={(e) => {
               const value = e.target.value;
@@ -128,27 +126,22 @@ export default function CarritoItem({
                 setCantidad(it.id, 1);
               }
             }}
-            sx={carritoItemStyles.cantidadInput}
           />
 
           {/* SUMAR */}
           <IconButton
             onClick={() => incrementar(it)}
-            disabled={it.cantidad >= stock}
-            sx={carritoItemStyles.botonCantidad}
+            disabled={it.cantidad >= stock || stock === 0}
           >
             <AddIcon />
           </IconButton>
         </Box>
 
         {/* ELIMINAR */}
-        <IconButton
-          onClick={() => eliminarItem(it.id)}
-          sx={carritoItemStyles.botonEliminar}
-        >
+        <IconButton onClick={handleEliminar}>
           <DeleteIcon />
         </IconButton>
       </Box>
     </Card>
   );
-}
+                         }
