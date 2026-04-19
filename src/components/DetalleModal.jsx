@@ -30,9 +30,7 @@ export default function DetalleModal({
   const [imagenActiva, setImagenActiva] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  // =========================
-  // 🖼 IMÁGENES DINÁMICAS
-  // =========================
+  // 🖼 IMÁGENES
   const imagenes = useMemo(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
       return varianteSeleccionada.imagenes.map((img) => img.imagen);
@@ -46,31 +44,19 @@ export default function DetalleModal({
     return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
-  // =========================
-  // 📦 STOCK TOTAL
-  // =========================
+  // 📦 STOCK
   const stockTotal = useMemo(() => {
-    if (!producto.variantes || producto.variantes.length === 0) {
-      return 1;
-    }
+    if (!producto.variantes?.length) return 1;
     return producto.variantes.reduce(
       (acc, v) => acc + (v.stock || 0),
       0
     );
   }, [producto]);
 
-  // =========================
-  // 🔄 RESET AL ABRIR
-  // =========================
   useEffect(() => {
-    if (open) {
-      setVarianteSeleccionada(null);
-    }
+    if (open) setVarianteSeleccionada(null);
   }, [open]);
 
-  // =========================
-  // 🔄 CAMBIO DE IMAGEN
-  // =========================
   useEffect(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
       setImagenActiva(varianteSeleccionada.imagenes[0].imagen);
@@ -82,14 +68,10 @@ export default function DetalleModal({
   const imagenSegura = imagenActiva || imagenes[0] || "/placeholder.png";
 
   const tieneVariantes = producto.variantes?.length > 0;
-
   const tieneStockVariantes = producto.variantes?.some(
     (v) => v.stock > 0
   );
 
-  // =========================
-  // 🛒 AGREGAR AL CARRITO
-  // =========================
   const handleAgregar = async () => {
     if (!isAuthenticated) {
       toast.warn("Debes iniciar sesión");
@@ -124,13 +106,12 @@ export default function DetalleModal({
       sx={detalleModalStyles.dialog}
       PaperProps={{ sx: detalleModalStyles.dialogPaper }}
     >
-      {/* ❌ Cerrar */}
       <IconButton onClick={onClose} sx={detalleModalStyles.botonCerrar}>
         <CloseIcon />
       </IconButton>
 
       <Stack spacing={3} alignItems="center">
-        {/* 🖼 IMAGEN PRINCIPAL */}
+        {/* IMAGEN */}
         <Box
           sx={detalleModalStyles.sliderBox}
           onClick={() => setLightbox && setLightbox(imagenSegura)}
@@ -143,7 +124,7 @@ export default function DetalleModal({
           />
         </Box>
 
-        {/* 🧩 MINIATURAS */}
+        {/* MINIATURAS */}
         {imagenes.length > 1 && (
           <Stack direction="row" spacing={1}>
             {imagenes.map((img, i) => (
@@ -152,7 +133,7 @@ export default function DetalleModal({
                 component="img"
                 src={img}
                 onClick={() => setImagenActiva(img)}
-                sx={{
+                sx={(theme) => ({
                   width: 55,
                   height: 55,
                   objectFit: "cover",
@@ -160,17 +141,15 @@ export default function DetalleModal({
                   cursor: "pointer",
                   border:
                     imagenSegura === img
-                      ? (theme) =>
-                          `2px solid ${theme.palette.primary.main}`
-                      : (theme) =>
-                          `1px solid ${theme.palette.divider}`,
-                }}
+                      ? `2px solid ${theme.palette.primary.main}`
+                      : `1px solid ${theme.palette.divider}`,
+                })}
               />
             ))}
           </Stack>
         )}
 
-        {/* 📄 INFO */}
+        {/* INFO */}
         <Box textAlign="center">
           <Typography variant="h5" fontWeight="bold">
             {producto.nombre}
@@ -181,7 +160,7 @@ export default function DetalleModal({
           </Typography>
         </Box>
 
-        {/* 🎯 VARIANTES */}
+        {/* VARIANTES */}
         {tieneVariantes && (
           <Stack spacing={2} alignItems="center">
             <Typography fontWeight="bold">
@@ -199,53 +178,47 @@ export default function DetalleModal({
                 return (
                   <Button
                     key={v.id}
-                    variant={isSelected ? "contained" : "outlined"}
+                    variant="outlined"
                     onClick={() => setVarianteSeleccionada(v)}
                     disabled={v.stock === 0}
                     sx={(theme) => ({
-                      opacity: v.stock === 0 ? 0.4 : 1,
                       textTransform: "none",
                       borderRadius: 2,
-                      display: "flex",
-                      gap: 0.5,
-                      alignItems: "center",
-
-                      // 🔥 VISIBILIDAD SIEMPRE
-                      border: `1px solid ${theme.palette.primary.main}`,
-                      color: isSelected
-                        ? theme.palette.primary.contrastText
-                        : theme.palette.primary.main,
+                      border: `1px solid ${
+                        isSelected
+                          ? theme.palette.primary.main
+                          : theme.palette.divider
+                      }`,
                       backgroundColor: isSelected
-                        ? theme.palette.primary.main
+                        ? theme.palette.action.selected
                         : "transparent",
+                      color: theme.palette.text.primary,
+                      opacity: v.stock === 0 ? 0.4 : 1,
 
                       "&:hover": {
-                        backgroundColor: isSelected
-                          ? theme.palette.primary.dark
-                          : theme.palette.action.hover,
+                        borderColor: theme.palette.primary.main,
+                        backgroundColor: theme.palette.action.hover,
                       },
                     })}
                   >
-                    {/* 🔥 ATRIBUTOS */}
-                    {[v.talla, v.color, v.modelo, v.capacidad]
-                      .filter(Boolean)
-                      .map((attr, i) => (
-                        <Chip
-                          key={i}
-                          label={attr}
-                          size="small"
-                          sx={{
-                            backgroundColor: "rgba(255,255,255,0.15)",
-                            color: "inherit",
-                          }}
-                        />
-                      ))}
+                    <Stack direction="row" spacing={0.5}>
+                      {[v.talla, v.color, v.modelo, v.capacidad]
+                        .filter(Boolean)
+                        .map((attr, i) => (
+                          <Chip
+                            key={i}
+                            label={attr}
+                            size="small"
+                            variant="outlined"
+                          />
+                        ))}
+                    </Stack>
                   </Button>
                 );
               })}
             </Stack>
 
-            {/* 📦 STOCK VARIANTE */}
+            {/* STOCK */}
             {varianteSeleccionada && (
               <Chip
                 label={`Stock: ${varianteSeleccionada.stock}`}
@@ -259,7 +232,7 @@ export default function DetalleModal({
           </Stack>
         )}
 
-        {/* 🛒 BOTÓN */}
+        {/* BOTÓN */}
         <Box
           sx={{
             width: "100%",
