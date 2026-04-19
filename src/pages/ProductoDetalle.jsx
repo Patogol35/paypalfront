@@ -10,6 +10,8 @@ import {
   Divider,
   Dialog,
   IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { useCarrito } from "../context/CarritoContext";
 import { toast } from "react-toastify";
@@ -23,21 +25,50 @@ export default function ProductoDetalle() {
   const producto = state?.producto;
   const { agregarAlCarrito } = useCarrito();
   const navigate = useNavigate();
+
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
 
+  // 🔥 NUEVO: selección de variantes
+  const [talla, setTalla] = useState(null);
+  const [color, setColor] = useState(null);
+
   if (!producto) return <Typography>Producto no encontrado</Typography>;
 
+  const variantes = producto.variantes || [];
+
+  // 🔥 opciones únicas
+  const tallas = [...new Set(variantes.map(v => v.talla).filter(Boolean))];
+  const colores = [...new Set(variantes.map(v => v.color).filter(Boolean))];
+
+  // 🔥 variante seleccionada
+  const varianteSeleccionada = variantes.find(
+    v => v.talla === talla && v.color === color
+  );
+
   const handleAdd = async () => {
+    if (variantes.length > 0 && !varianteSeleccionada) {
+      toast.warning("Selecciona talla y color");
+      return;
+    }
+
     try {
-      await agregarAlCarrito(producto.id, 1);
+      await agregarAlCarrito(
+        producto.id,
+        varianteSeleccionada?.id,
+        1
+      );
+
       toast.success(`"${producto.nombre}" agregado al carrito ✅`);
     } catch (e) {
       toast.error(e.message);
     }
   };
 
-  const imagenes = producto.imagenes || [producto.imagen];
+  const imagenes = [
+    producto.imagen,
+    ...(producto.imagenes?.map(i => i.imagen) || []),
+  ].filter(Boolean);
 
   const handleZoom = (img) => {
     setZoomImage(img);
@@ -55,7 +86,7 @@ export default function ProductoDetalle() {
 
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", p: { xs: 2, md: 4 } }}>
-      {/* Botón volver */}
+      {/* Volver */}
       <Button
         startIcon={<ArrowBackIcon />}
         variant="outlined"
@@ -65,21 +96,20 @@ export default function ProductoDetalle() {
         Regresar a productos
       </Button>
 
-      <Grid container spacing={5} alignItems="stretch">
-        {/* Carrusel de imágenes */}
+      <Grid container spacing={5}>
+        {/* IMÁGENES */}
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              bgcolor: "#fafafa",
-              borderRadius: 3,
-              p: 2,
-              boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-            }}
-          >
+          <Box sx={{
+            bgcolor: "#fafafa",
+            borderRadius: 3,
+            p: 2,
+            boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+          }}>
             <Slider {...settings}>
               {imagenes.map((img, i) => (
                 <Box
                   key={i}
+                  onClick={() => handleZoom(img)}
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -87,19 +117,16 @@ export default function ProductoDetalle() {
                     height: { xs: 300, md: 500 },
                     cursor: "pointer",
                   }}
-                  onClick={() => handleZoom(img)}
                 >
                   <Box
                     component="img"
                     src={img}
-                    alt={`${producto.nombre} ${i + 1}`}
+                    alt=""
                     sx={{
                       maxWidth: "100%",
                       maxHeight: "100%",
                       objectFit: "contain",
                       borderRadius: 2,
-                      transition: "transform 0.3s ease",
-                      "&:hover": { transform: "scale(1.05)" },
                     }}
                   />
                 </Box>
@@ -108,56 +135,82 @@ export default function ProductoDetalle() {
           </Box>
         </Grid>
 
-        {/* Detalles */}
+        {/* DETALLE */}
         <Grid item xs={12} md={6}>
           <Stack spacing={3}>
             <Typography variant="h4" fontWeight="bold">
               {producto.nombre}
             </Typography>
 
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="bold"
-                color="primary"
-                sx={{ mb: 1 }}
-              >
-                ${producto.precio}
-              </Typography>
+            <Typography variant="h5" color="primary">
+              ${producto.precio}
+            </Typography>
+
+            {/* 🔥 TALLAS */}
+            {tallas.length > 0 && (
+              <>
+                <Typography fontWeight="bold">Talla</Typography>
+                <ToggleButtonGroup
+                  value={talla}
+                  exclusive
+                  onChange={(e, val) => setTalla(val)}
+                >
+                  {tallas.map((t) => (
+                    <ToggleButton key={t} value={t}>
+                      {t}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </>
+            )}
+
+            {/* 🔥 COLORES */}
+            {colores.length > 0 && (
+              <>
+                <Typography fontWeight="bold">Color</Typography>
+                <ToggleButtonGroup
+                  value={color}
+                  exclusive
+                  onChange={(e, val) => setColor(val)}
+                >
+                  {colores.map((c) => (
+                    <ToggleButton key={c} value={c}>
+                      {c}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </>
+            )}
+
+            {/* 🔥 STOCK REAL */}
+            {varianteSeleccionada && (
               <Chip
-                label="En stock"
-                color="success"
-                variant="outlined"
-                sx={{ fontWeight: "bold" }}
+                label={`Stock: ${varianteSeleccionada.stock}`}
+                color={varianteSeleccionada.stock > 0 ? "success" : "default"}
               />
-            </Box>
+            )}
 
             <Divider />
 
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", lineHeight: 1.6 }}
-            >
+            <Typography sx={{ color: "text.secondary" }}>
               {producto.descripcion}
             </Typography>
 
+            {/* BOTÓN */}
             <Button
               variant="contained"
               size="large"
               startIcon={<ShoppingCartIcon />}
               onClick={handleAdd}
+              disabled={
+                variantes.length > 0 &&
+                (!varianteSeleccionada ||
+                  varianteSeleccionada.stock === 0)
+              }
               sx={{
                 borderRadius: 3,
                 py: 1.5,
-                px: 3,
-                fontSize: "1rem",
                 background: "linear-gradient(135deg, #1976d2, #42a5f5)",
-                boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-3px)",
-                  boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
-                },
               }}
             >
               Agregar al carrito
@@ -166,44 +219,20 @@ export default function ProductoDetalle() {
         </Grid>
       </Grid>
 
-      {/* Zoom modal */}
-      <Dialog
-        open={zoomOpen}
-        onClose={() => setZoomOpen(false)}
-        maxWidth="lg"
-        PaperProps={{
-          sx: { background: "transparent", boxShadow: "none", p: 0 },
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            bgcolor: "rgba(0,0,0,0.8)",
-            p: 2,
-            borderRadius: 2,
-          }}
-        >
+      {/* ZOOM */}
+      <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)}>
+        <Box sx={{ position: "relative" }}>
           <IconButton
             onClick={() => setZoomOpen(false)}
-            sx={{
-              position: "absolute",
-              top: 8,
-              right: 8,
-              color: "white",
-              bgcolor: "rgba(0,0,0,0.5)",
-              "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },
-            }}
+            sx={{ position: "absolute", top: 10, right: 10, color: "white" }}
           >
             <CloseIcon />
           </IconButton>
+
           <Box
             component="img"
             src={zoomImage}
-            alt={producto.nombre}
-            sx={{ maxHeight: "80vh", maxWidth: "100%", objectFit: "contain" }}
+            sx={{ maxHeight: "80vh", maxWidth: "100%" }}
           />
         </Box>
       </Dialog>
