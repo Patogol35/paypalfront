@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import detalleModalStyles from "./DetalleModal.styles";
 
-// 🔥 reutilizamos el mismo estilo del card
+// 🔥 reutilizamos el estilo del card (IMPORTANTE)
 import { botonAgregarSx } from "../components/ProductoCard.styles"; // ajusta ruta
 
 export default function DetalleModal({
@@ -48,7 +48,7 @@ export default function DetalleModal({
     return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
-  // 🔥 STOCK TOTAL
+  // 🔥 STOCK TOTAL (igual que card)
   const stockTotal = useMemo(() => {
     if (!producto.variantes || producto.variantes.length === 0) {
       return 1;
@@ -228,7 +228,7 @@ export default function DetalleModal({
           </Stack>
         )}
 
-        {/* BOTÓN CENTRADO Y CON ANCHO CONTROLADO */}
+        {/* 🔥 BOTÓN CORREGIDO */}
         <Box
           sx={{
             width: "100%",
@@ -239,13 +239,13 @@ export default function DetalleModal({
         >
           <Button
             variant="contained"
-            fullWidth
             startIcon={<AddShoppingCartIcon />}
             onClick={handleAgregar}
-            sx={(theme) => ({
-              ...botonAgregarSx(stockTotal)(theme),
-              maxWidth: 400, // 🔥 controla tamaño en desktop
-            })}
+            sx={{
+              ...botonAgregarSx(stockTotal),
+              maxWidth: 400,
+              width: "100%",
+            }}
             disabled={
               tieneVariantes
                 ? !varianteSeleccionada ||
