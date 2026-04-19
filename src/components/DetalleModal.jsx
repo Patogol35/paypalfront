@@ -25,27 +25,42 @@ export default function DetalleModal({
 
   if (!producto) return null;
 
+  const [imagenActiva, setImagenActiva] = useState("");
+  const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
+
   // =========================
-  // 🖼 IMÁGENES
+  // 🖼 IMÁGENES DINÁMICAS
   // =========================
   const imagenes = useMemo(() => {
+    // 🔥 Si hay variante seleccionada → usar sus imágenes
+    if (varianteSeleccionada?.imagenes?.length > 0) {
+      return varianteSeleccionada.imagenes.map((img) => img.imagen);
+    }
+
+    // 🔥 fallback a imágenes generales
     const imgs = [
       producto.imagen,
       ...(producto.imagenes?.map((img) => img.imagen) || []),
     ].filter(Boolean);
 
     return [...new Set(imgs)];
-  }, [producto]);
+  }, [producto, varianteSeleccionada]);
 
-  const [imagenActiva, setImagenActiva] = useState("");
-  const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
-
+  // 🔥 Reset al abrir modal
   useEffect(() => {
     if (open) {
-      setImagenActiva(imagenes[0] || "");
       setVarianteSeleccionada(null);
     }
-  }, [open, imagenes]);
+  }, [open]);
+
+  // 🔥 Cambiar imagen al cambiar variante
+  useEffect(() => {
+    if (varianteSeleccionada?.imagenes?.length > 0) {
+      setImagenActiva(varianteSeleccionada.imagenes[0].imagen);
+    } else {
+      setImagenActiva(imagenes[0] || "");
+    }
+  }, [varianteSeleccionada, imagenes]);
 
   const imagenSegura = imagenActiva || imagenes[0] || "/placeholder.png";
 
@@ -56,7 +71,7 @@ export default function DetalleModal({
   );
 
   // =========================
-  // 🛒 AGREGAR (CORREGIDO)
+  // 🛒 AGREGAR
   // =========================
   const handleAgregar = async () => {
     if (!isAuthenticated) {
@@ -72,8 +87,8 @@ export default function DetalleModal({
     try {
       await agregarAlCarrito(
         producto.id,
-        varianteSeleccionada?.id || null, // ✅ variante correcta
-        1 // ✅ cantidad correcta
+        varianteSeleccionada?.id || null,
+        1
       );
 
       toast.success("Producto agregado ✅");
@@ -98,7 +113,7 @@ export default function DetalleModal({
       </IconButton>
 
       <Stack spacing={3} alignItems="center">
-        {/* IMAGEN */}
+        {/* IMAGEN PRINCIPAL */}
         <Box
           sx={detalleModalStyles.sliderBox}
           onClick={() => setLightbox && setLightbox(imagenSegura)}
@@ -182,12 +197,14 @@ export default function DetalleModal({
               })}
             </Stack>
 
-            {/* 🔥 STOCK DINÁMICO */}
+            {/* STOCK DINÁMICO */}
             {varianteSeleccionada && (
               <Chip
                 label={`Stock: ${varianteSeleccionada.stock}`}
                 color={
-                  varianteSeleccionada.stock > 0 ? "success" : "default"
+                  varianteSeleccionada.stock > 0
+                    ? "success"
+                    : "default"
                 }
               />
             )}
@@ -213,4 +230,4 @@ export default function DetalleModal({
       </Stack>
     </Dialog>
   );
-        }
+}
