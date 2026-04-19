@@ -16,65 +16,53 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { toast } from "react-toastify";
 import carritoItemStyles from "./CarritoItem.styles";
 
-export default function CarritoItem(props) {
-  const {
-    it,
-    incrementar,
-    decrementar,
-    setCantidad,
-    eliminarItem,
-  } = props || {};
-
-  // 🛑 SI NO HAY DATA → NO RENDERIZA
-  if (!it || typeof it !== "object") {
-    console.warn("Item inválido en carrito:", it);
-    return null;
-  }
+export default function CarritoItem({
+  it,
+  incrementar,
+  decrementar,
+  setCantidad,
+  eliminarItem,
+}) {
+  if (!it || !it.producto) return null;
 
   const producto = it.producto || {};
   const variante = it.variante || {};
 
-  // 📦 STOCK SEGURO
-  const stock =
-    Number(variante.stock ?? producto.stock ?? 0) || 0;
-
-  // 💰 PRECIO SEGURO
-  const precioUnitario =
-    Number(variante.precio ?? producto.precio ?? 0) || 0;
-
-  const cantidad = Number(it.cantidad ?? 1) || 1;
+  const stock = Number(variante.stock ?? producto.stock ?? 0);
+  const precioUnitario = Number(variante.precio ?? producto.precio ?? 0);
+  const cantidad = Number(it.cantidad ?? 1);
 
   const subtotal = precioUnitario * cantidad;
 
-  // 🖼 IMAGEN SEGURA
   const imagen =
     variante?.imagenes?.[0]?.imagen ||
     producto?.imagenes?.[0]?.imagen ||
     producto?.imagen ||
     "/placeholder.png";
 
-  // 🧠 VARIANTE LABEL
-  const varianteLabel = [
-    variante.talla,
-    variante.color,
-    variante.modelo,
-  ]
+  const varianteLabel = [variante.talla, variante.color, variante.modelo]
     .filter(Boolean)
     .join(" - ");
+
+  // 🗑 ELIMINAR CON TOAST
+  const handleEliminar = () => {
+    eliminarItem(it.id);
+    toast.info("Producto eliminado 🗑️");
+  };
 
   return (
     <Card sx={carritoItemStyles.card}>
       <CardMedia
         component="img"
         image={imagen}
-        alt={producto?.nombre || "producto"}
+        alt={producto.nombre}
         sx={(theme) => carritoItemStyles.media(theme)}
       />
 
       <CardContent sx={carritoItemStyles.content}>
         <Box>
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            {producto?.nombre || "Producto"}
+          <Typography variant="h6" fontWeight="bold">
+            {producto.nombre}
           </Typography>
 
           {varianteLabel && (
@@ -83,6 +71,7 @@ export default function CarritoItem(props) {
             </Typography>
           )}
 
+          {/* 💰 PRECIO */}
           <Stack direction="row" spacing={1} alignItems="center" mt={1}>
             <MonetizationOnIcon fontSize="small" color="primary" />
             <Typography variant="body2" fontWeight="bold">
@@ -91,23 +80,20 @@ export default function CarritoItem(props) {
           </Stack>
         </Box>
 
-        <Stack direction="row" spacing={1} flexWrap="wrap">
+        {/* SUBTOTAL */}
+        <Stack direction="row" spacing={1}>
           <Chip
             label={`Subtotal: $${subtotal.toFixed(2)}`}
             color="success"
           />
-
-          <Chip
-            label={`Stock: ${stock}`}
-            color={stock > 0 ? "info" : "default"}
-          />
         </Stack>
       </CardContent>
 
+      {/* CONTROLES */}
       <Box sx={carritoItemStyles.controlesWrapper}>
         <Box sx={carritoItemStyles.cantidadWrapper}>
           <IconButton
-            onClick={() => decrementar && decrementar(it)}
+            onClick={() => decrementar(it)}
             disabled={cantidad <= 1}
           >
             <RemoveIcon />
@@ -117,36 +103,44 @@ export default function CarritoItem(props) {
             type="number"
             size="small"
             value={cantidad}
-            inputProps={{ min: 1, max: stock || 1 }}
+            inputProps={{ min: 1, max: stock }}
             onChange={(e) => {
               const val = Number(e.target.value);
 
               if (!val || val < 1) {
-                setCantidad && setCantidad(it.id, 1);
+                setCantidad(it.id, 1);
                 return;
               }
 
               if (val > stock) {
                 toast.warning(`Solo hay ${stock}`);
-                setCantidad && setCantidad(it.id, stock);
+                setCantidad(it.id, stock);
                 return;
               }
 
-              setCantidad && setCantidad(it.id, val);
+              setCantidad(it.id, val);
             }}
             sx={carritoItemStyles.cantidadInput}
           />
 
           <IconButton
-            onClick={() => incrementar && incrementar(it)}
+            onClick={() => incrementar(it)}
             disabled={cantidad >= stock}
           >
             <AddIcon />
           </IconButton>
         </Box>
 
+        {/* 🟥 BOTÓN ELIMINAR PRO */}
         <IconButton
-          onClick={() => eliminarItem && eliminarItem(it.id)}
+          onClick={handleEliminar}
+          sx={{
+            color: "#d32f2f",
+            "&:hover": {
+              backgroundColor: "rgba(211,47,47,0.1)",
+              transform: "scale(1.1)",
+            },
+          }}
         >
           <DeleteIcon />
         </IconButton>
