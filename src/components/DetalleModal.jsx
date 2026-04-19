@@ -15,7 +15,8 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import detalleModalStyles from "./DetalleModal.styles";
 
-import { botonAgregarSx } from "../components/ProductoCard.styles";
+// 🔥 reutilizamos el estilo del card (IMPORTANTE)
+import { botonAgregarSx } from "../components/ProductoCard.styles"; // ajusta ruta
 
 export default function DetalleModal({
   producto,
@@ -47,9 +48,7 @@ export default function DetalleModal({
     return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
-  // =========================
-  // 📦 STOCK TOTAL
-  // =========================
+  // 🔥 STOCK TOTAL (igual que card)
   const stockTotal = useMemo(() => {
     if (!producto.variantes || producto.variantes.length === 0) {
       return 1;
@@ -60,18 +59,14 @@ export default function DetalleModal({
     );
   }, [producto]);
 
-  // =========================
-  // 🔄 RESET AL ABRIR
-  // =========================
+  // Reset al abrir
   useEffect(() => {
     if (open) {
       setVarianteSeleccionada(null);
     }
   }, [open]);
 
-  // =========================
-  // 🖼 CAMBIO IMAGEN
-  // =========================
+  // Cambiar imagen según variante
   useEffect(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
       setImagenActiva(varianteSeleccionada.imagenes[0].imagen);
@@ -87,22 +82,6 @@ export default function DetalleModal({
   const tieneStockVariantes = producto.variantes?.some(
     (v) => v.stock > 0
   );
-
-  // =========================
-  // 🏷 LABEL DINÁMICO 🔥
-  // =========================
-  const getLabel = (v) => {
-    return [
-      v.talla,
-      v.color,
-      v.material,
-      v.edicion,
-      v.capacidad,
-      v.marca,
-    ]
-      .filter(Boolean)
-      .join(" / ");
-  };
 
   // =========================
   // 🛒 AGREGAR
@@ -141,14 +120,13 @@ export default function DetalleModal({
       sx={detalleModalStyles.dialog}
       PaperProps={{ sx: detalleModalStyles.dialogPaper }}
     >
-      {/* ❌ Cerrar */}
+      {/* Cerrar */}
       <IconButton onClick={onClose} sx={detalleModalStyles.botonCerrar}>
         <CloseIcon />
       </IconButton>
 
       <Stack spacing={3} alignItems="center">
-
-        {/* 🖼 IMAGEN */}
+        {/* IMAGEN PRINCIPAL */}
         <Box
           sx={detalleModalStyles.sliderBox}
           onClick={() => setLightbox && setLightbox(imagenSegura)}
@@ -194,13 +172,6 @@ export default function DetalleModal({
             {producto.nombre}
           </Typography>
 
-          {/* 💰 PRECIO DINÁMICO */}
-          <Typography variant="h6" color="primary" fontWeight="bold">
-            $
-            {varianteSeleccionada?.precio ||
-              producto.precio}
-          </Typography>
-
           <Typography sx={{ mt: 1 }}>
             {producto.descripcion}
           </Typography>
@@ -219,7 +190,7 @@ export default function DetalleModal({
 
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {producto.variantes.map((v) => {
-                const label = getLabel(v);
+                const label = `${v.talla || ""} ${v.color || ""}`.trim();
 
                 return (
                   <Button
@@ -237,18 +208,13 @@ export default function DetalleModal({
                       borderRadius: 2,
                     }}
                   >
-                    <Box textAlign="center">
-                      <div>{label || "Única"}</div>
-                      <small>
-                        ${v.precio || producto.precio} • Stock: {v.stock}
-                      </small>
-                    </Box>
+                    {label || "Única"} ({v.stock})
                   </Button>
                 );
               })}
             </Stack>
 
-            {/* STOCK */}
+            {/* STOCK DINÁMICO */}
             {varianteSeleccionada && (
               <Chip
                 label={`Stock: ${varianteSeleccionada.stock}`}
@@ -262,7 +228,7 @@ export default function DetalleModal({
           </Stack>
         )}
 
-        {/* BOTÓN */}
+        {/* 🔥 BOTÓN CORREGIDO */}
         <Box
           sx={{
             width: "100%",
@@ -298,8 +264,7 @@ export default function DetalleModal({
               : "Agotado"}
           </Button>
         </Box>
-
       </Stack>
     </Dialog>
   );
-        }
+                      }
