@@ -18,37 +18,31 @@ import carritoItemStyles from "./CarritoItem.styles";
 
 export default function CarritoItem({
   it,
+  theme,
   incrementar,
   decrementar,
   setCantidad,
   eliminarItem,
 }) {
-  if (!it || !it.producto) return null;
-
-  // 📦 STOCK
+  // 🔥 STOCK REAL (VARIANTE > PRODUCTO)
   const stock = it.variante?.stock ?? 0;
 
-  // 🖼 IMAGEN
+  // =========================
+  // 🖼 IMAGEN DINÁMICA
+  // =========================
   const imagen =
-    it.variante?.imagenes?.[0]?.imagen ||
-    it.producto?.imagenes?.[0]?.imagen ||
-    it.producto?.imagen ||
-    "/placeholder.png";
+    it.variante?.imagenes?.[0]?.imagen || // 🔥 variante primero
+    it.producto?.imagenes?.[0]?.imagen || // luego imágenes producto
+    it.producto?.imagen || // fallback principal
+    "/placeholder.png"; // último fallback
 
-  // ✅ FIX CRÍTICO
   const altTexto = it.variante
     ? `${it.producto?.nombre} ${it.variante.color || ""}`
     : it.producto?.nombre;
 
-  // 🗑 ELIMINAR CON TOAST
-  const handleEliminar = () => {
-    eliminarItem(it.id);
-    toast.info("Producto eliminado 🗑️");
-  };
-
   return (
     <Card sx={carritoItemStyles.card}>
-      {/* IMAGEN */}
+      {/* Imagen */}
       <CardMedia
         component="img"
         image={imagen}
@@ -63,7 +57,7 @@ export default function CarritoItem({
             {it.producto?.nombre}
           </Typography>
 
-          {/* VARIANTE */}
+          {/* 🔥 VARIANTE */}
           {it.variante && (
             <Typography variant="body2" color="text.secondary">
               {it.variante.talla && `Talla: ${it.variante.talla}`}{" "}
@@ -147,19 +141,14 @@ export default function CarritoItem({
           </IconButton>
         </Box>
 
-        {/* 🟥 ELIMINAR */}
+        {/* ELIMINAR */}
         <IconButton
-          onClick={handleEliminar}
-          sx={{
-            color: "#d32f2f",
-            "&:hover": {
-              backgroundColor: "rgba(211,47,47,0.1)",
-            },
-          }}
+          onClick={() => eliminarItem(it.id)}
+          sx={carritoItemStyles.botonEliminar}
         >
           <DeleteIcon />
         </IconButton>
       </Box>
     </Card>
   );
-              }
+}
