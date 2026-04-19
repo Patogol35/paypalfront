@@ -160,7 +160,7 @@ export default function DetalleModal({
           </Typography>
         </Box>
 
-        {/* VARIANTES */}
+        {/* 🔥 VARIANTES (DISEÑO NUEVO) */}
         {tieneVariantes && (
           <Stack spacing={2} alignItems="center">
             <Typography fontWeight="bold">
@@ -171,92 +171,50 @@ export default function DetalleModal({
               <Chip label="Sin stock" color="error" />
             )}
 
-            <Stack direction="row" flexWrap="wrap" gap={1}>
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              gap={1.5}
+              justifyContent="center"
+            >
               {producto.variantes.map((v) => {
                 const isSelected = varianteSeleccionada?.id === v.id;
+
+                const label = [...new Set(
+                  [v.talla, v.color, v.modelo, v.capacidad]
+                    .filter(Boolean)
+                    .map((x) => x.trim())
+                )].join(" - ");
 
                 return (
                   <Button
                     key={v.id}
-                    variant="outlined"
                     onClick={() => setVarianteSeleccionada(v)}
                     disabled={v.stock === 0}
-                    sx={(theme) => ({
+                    sx={{
+                      px: 2.5,
+                      py: 1,
+                      borderRadius: "999px",
                       textTransform: "none",
-                      borderRadius: 2,
-                      border: `1px solid ${
-                        isSelected
-                          ? theme.palette.primary.main
-                          : theme.palette.divider
-                      }`,
-                      backgroundColor: isSelected
-                        ? theme.palette.action.selected
-                        : "transparent",
-                      color: theme.palette.text.primary,
+                      fontWeight: 500,
+
+                      border: "1px solid #ddd",
+                      backgroundColor: isSelected ? "#111" : "#fff",
+                      color: isSelected ? "#fff" : "#333",
+
                       opacity: v.stock === 0 ? 0.4 : 1,
 
+                      transition: "all 0.2s ease",
+
                       "&:hover": {
-                        borderColor: theme.palette.primary.main,
-                        backgroundColor: theme.palette.action.hover,
+                        backgroundColor: isSelected
+                          ? "#000"
+                          : "#f5f5f5",
+                        borderColor: "#999",
                       },
-                    })}
+                    }}
                   >
-                    <Stack direction="row" flexWrap="wrap" gap={1.5} justifyContent="center">
-  {producto.variantes.map((v) => {
-    const isSelected = varianteSeleccionada?.id === v.id;
-
-    const label = [
-      v.talla,
-      v.color,
-      v.modelo,
-      v.capacidad,
-    ]
-      .filter(Boolean)
-      .join(" - ");
-
-    return (
-      <Button
-        key={v.id}
-        onClick={() => setVarianteSeleccionada(v)}
-        disabled={v.stock === 0}
-        sx={(theme) => ({
-          px: 2.5,
-          py: 1,
-          borderRadius: "999px",
-          textTransform: "none",
-          fontSize: 14,
-          fontWeight: 500,
-
-          // 🔥 ESTILO LIMPIO
-          border: `1px solid ${
-            isSelected
-              ? theme.palette.primary.main
-              : "#ddd"
-          }`,
-
-          backgroundColor: isSelected
-            ? theme.palette.primary.main
-            : "#fff",
-
-          color: isSelected ? "#fff" : "#333",
-
-          opacity: v.stock === 0 ? 0.4 : 1,
-
-          transition: "all 0.2s ease",
-
-          "&:hover": {
-            backgroundColor: isSelected
-              ? theme.palette.primary.dark
-              : "#f5f5f5",
-            borderColor: theme.palette.primary.main,
-          },
-        })}
-      >
-        {label || "Única"}
-      </Button>
-    );
-  })}
-</Stack>
+                    {label || "Única"}
                   </Button>
                 );
               })}
@@ -315,4 +273,4 @@ export default function DetalleModal({
       </Stack>
     </Dialog>
   );
-}
+              }
