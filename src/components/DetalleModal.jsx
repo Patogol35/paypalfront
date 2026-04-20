@@ -84,7 +84,9 @@ export default function DetalleModal({
   // 🛒 AGREGAR
   const handleAgregar = async () => {
     if (!isAuthenticated) {
-      toast.warn("Debes iniciar sesión");
+      
+      toast.error("Debes iniciar sesión para agregar productos");
+      navigate("/login");
       return;
     }
 
