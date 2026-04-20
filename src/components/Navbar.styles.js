@@ -68,7 +68,6 @@ const styles = {
     mt: isMobile ? 12 : 0,
   }),
 
-  // 🔥 logout corregido
   logoutBtn: (theme) => ({
     fontSize: "1.05rem",
     fontWeight: 600,
