@@ -13,7 +13,6 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useState, useEffect, useMemo } from "react";
 import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import detalleModalStyles from "./DetalleModal.styles";
 import { botonAgregarSx } from "../components/ProductoCard.styles";
@@ -24,11 +23,10 @@ export default function DetalleModal({
   onClose,
   setLightbox,
   modo = "compra",
-  setModo,
+  setModo, // 🔥 IMPORTANTE
 }) {
   const { agregarAlCarrito } = useCarrito();
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
 
   if (!producto) return null;
 
@@ -58,7 +56,7 @@ export default function DetalleModal({
     );
   }, [producto]);
 
-  // RESET
+  // 🔥 RESET SOLO CUANDO ABRE EN COMPRA
   useEffect(() => {
     if (open && modo === "compra") {
       setVarianteSeleccionada(null);
@@ -86,14 +84,7 @@ export default function DetalleModal({
   // 🛒 AGREGAR
   const handleAgregar = async () => {
     if (!isAuthenticated) {
-      toast.warn("Debes iniciar sesión");
-
-      onClose(); // 🔥 cerrar modal primero
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 100);
-
+      toast.error("Debes iniciar sesión para agregar productos al carrito");
       return;
     }
 
@@ -143,7 +134,7 @@ export default function DetalleModal({
           />
         </Box>
 
-        {/* PRECIO */}
+        {/* 💰 PRECIO */}
         <Stack direction="row" alignItems="center" spacing={1}>
           <AttachMoneyIcon color="success" />
           <Typography variant="h5" fontWeight="bold" color="success.main">
@@ -187,7 +178,7 @@ export default function DetalleModal({
           </Typography>
         </Box>
 
-        {/* VARIANTES */}
+        {/* 🔥 VARIANTES SOLO EN COMPRA */}
         {tieneVariantes && modo === "compra" && (
           <Stack spacing={2} alignItems="center">
             <Typography fontWeight="bold">
@@ -249,27 +240,20 @@ export default function DetalleModal({
           </Stack>
         )}
 
-        {/* BOTÓN */}
-        <Box sx={{ width: "100%", mt: 2, display: "flex", justifyContent: "center" }}>
+        {/* 🔥 BOTÓN FINAL */}
+        <Box
+          sx={{
+            width: "100%",
+            mt: 2,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           {modo === "info" ? (
             <Button
               variant="contained"
               fullWidth
-              onClick={() => {
-                if (!isAuthenticated) {
-                  toast.warn("Debes iniciar sesión");
-
-                  onClose();
-
-                  setTimeout(() => {
-                    navigate("/login");
-                  }, 100);
-
-                  return;
-                }
-
-                setModo("compra");
-              }}
+              onClick={() => setModo("compra")} // 🔥 CAMBIO REAL
               sx={{
                 maxWidth: 400,
                 width: "100%",
@@ -310,4 +294,4 @@ export default function DetalleModal({
       </Stack>
     </Dialog>
   );
-}
+                }
