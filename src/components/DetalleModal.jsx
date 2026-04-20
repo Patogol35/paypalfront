@@ -13,6 +13,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useState, useEffect, useMemo } from "react";
 import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import detalleModalStyles from "./DetalleModal.styles";
 import { botonAgregarSx } from "../components/ProductoCard.styles";
@@ -23,10 +24,11 @@ export default function DetalleModal({
   onClose,
   setLightbox,
   modo = "compra",
-  setModo, // 🔥 IMPORTANTE
+  setModo,
 }) {
   const { agregarAlCarrito } = useCarrito();
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   if (!producto) return null;
 
@@ -56,7 +58,7 @@ export default function DetalleModal({
     );
   }, [producto]);
 
-  // 🔥 RESET SOLO CUANDO ABRE EN COMPRA
+  // 🔥 RESET CUANDO ABRE EN COMPRA
   useEffect(() => {
     if (open && modo === "compra") {
       setVarianteSeleccionada(null);
@@ -84,12 +86,17 @@ export default function DetalleModal({
   // 🛒 AGREGAR
   const handleAgregar = async () => {
     if (!isAuthenticated) {
-      toast.warn("Debes iniciar sesión");
+      toast.error("Debes iniciar sesión para agregar productos");
+
+      navigate("/login", {
+        state: { redirect: `/producto/${producto.id}` },
+      });
+
       return;
     }
 
     if (tieneVariantes && !varianteSeleccionada) {
-      toast.error("Selecciona una variante");
+      toast.info("Selecciona una opción 👇");
       return;
     }
 
@@ -178,7 +185,7 @@ export default function DetalleModal({
           </Typography>
         </Box>
 
-        {/* 🔥 VARIANTES SOLO EN COMPRA */}
+        {/* 🔥 VARIANTES */}
         {tieneVariantes && modo === "compra" && (
           <Stack spacing={2} alignItems="center">
             <Typography fontWeight="bold">
@@ -253,14 +260,28 @@ export default function DetalleModal({
             <Button
               variant="contained"
               fullWidth
-              onClick={() => setModo("compra")} // 🔥 CAMBIO REAL
+              onClick={() => {
+                if (!isAuthenticated) {
+                  toast.error("Debes iniciar sesión");
+
+                  navigate("/login", {
+                    state: {
+                      redirect: `/producto/${producto.id}`,
+                    },
+                  });
+
+                  return;
+                }
+
+                setModo("compra");
+              }}
               sx={{
                 maxWidth: 400,
                 width: "100%",
                 backgroundColor: "#2196f3",
               }}
             >
-              Seleccionar opciones
+              Agregar al Carrito 
             </Button>
           ) : (
             <Button
