@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { login as apiLogin } from "../api/api";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
@@ -37,6 +37,8 @@ const validators = {
 export default function Login() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/"; // 🔥 CLAVE
   const { login } = useAuth();
 
   const [form, setForm] = useState({ username: "", password: "" });
@@ -106,7 +108,10 @@ export default function Login() {
 
       login(data.access, data.refresh);
       toast.success(`Bienvenido/a, ${form.username} 👋`);
-      navigate("/");
+
+      // 🔥 REDIRECCIÓN INTELIGENTE
+      navigate(from, { replace: true });
+
     } catch (error) {
       handleErrors(error);
     } finally {
@@ -144,7 +149,10 @@ export default function Login() {
 
       login(data.access, data.refresh);
       toast.success("Bienvenido con Google");
-      navigate("/");
+
+      // 🔥 REDIRECCIÓN INTELIGENTE
+      navigate(from, { replace: true });
+
     } catch (error) {
       console.error(error);
       toast.error("Error al iniciar con Google");
@@ -260,4 +268,4 @@ export default function Login() {
       </Paper>
     </Container>
   );
-}
+      }
