@@ -21,7 +21,7 @@ export default function DetalleProducto({
   setLightbox,
   modo = "compra",
   setModo,
-  onBack, // 🔥 opcional (para volver)
+  onBack,
 }) {
   const { agregarAlCarrito } = useCarrito();
   const { isAuthenticated } = useAuth();
@@ -29,7 +29,8 @@ export default function DetalleProducto({
   const [imagenActiva, setImagenActiva] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  if (!producto) return null;
+  // 🔥 PROTEGER producto
+  const prod = producto || {};
 
   // 🖼 IMÁGENES
   const imagenes = useMemo(() => {
@@ -38,21 +39,21 @@ export default function DetalleProducto({
     }
 
     const imgs = [
-      producto.imagen,
-      ...(producto.imagenes?.map((img) => img.imagen) || []),
+      prod.imagen,
+      ...(prod.imagenes?.map((img) => img.imagen) || []),
     ].filter(Boolean);
 
     return [...new Set(imgs)];
-  }, [producto, varianteSeleccionada]);
+  }, [prod, varianteSeleccionada]);
 
   // 📦 STOCK
   const stockTotal = useMemo(() => {
-    if (!producto.variantes?.length) return 1;
-    return producto.variantes.reduce(
+    if (!prod.variantes?.length) return 1;
+    return prod.variantes.reduce(
       (acc, v) => acc + (v.stock || 0),
       0
     );
-  }, [producto]);
+  }, [prod]);
 
   useEffect(() => {
     if (modo === "compra") {
@@ -70,13 +71,13 @@ export default function DetalleProducto({
 
   const imagenSegura = imagenActiva || imagenes[0] || "/placeholder.png";
 
-  const tieneVariantes = producto.variantes?.length > 0;
-  const tieneStockVariantes = producto.variantes?.some(
+  const tieneVariantes = (prod.variantes || []).length > 0;
+  const tieneStockVariantes = (prod.variantes || []).some(
     (v) => v.stock > 0
   );
 
   const precioActual =
-    varianteSeleccionada?.precio ?? producto.precio;
+    varianteSeleccionada?.precio ?? prod.precio;
 
   const handleAgregar = async () => {
     if (!isAuthenticated) {
@@ -91,7 +92,7 @@ export default function DetalleProducto({
 
     try {
       await agregarAlCarrito(
-        producto.id,
+        prod.id,
         varianteSeleccionada?.id || null,
         1
       );
@@ -102,17 +103,24 @@ export default function DetalleProducto({
     }
   };
 
+  // 🔥 AQUÍ sí puedes validar
+  if (!producto) {
+    return (
+      <Box p={4} textAlign="center">
+        <Typography>Cargando producto...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 2, maxWidth: 900, mx: "auto" }}>
       
-      {/* 🔙 BOTÓN ATRÁS */}
-      <IconButton onClick={onBack}>
+      <IconButton onClick={() => onBack && onBack()}>
         <ArrowBackIcon />
       </IconButton>
 
       <Stack spacing={3} alignItems="center">
 
-        {/* IMAGEN */}
         <Box
           sx={detalleModalStyles.sliderBox}
           onClick={() => setLightbox && setLightbox(imagenSegura)}
@@ -120,12 +128,11 @@ export default function DetalleProducto({
           <Box
             component="img"
             src={imagenSegura}
-            alt={producto.nombre}
+            alt={prod.nombre}
             sx={detalleModalStyles.imagen}
           />
         </Box>
 
-        {/* PRECIO */}
         <Stack direction="row" alignItems="center" spacing={1}>
           <AttachMoneyIcon color="success" />
           <Typography variant="h5" fontWeight="bold" color="success.main">
@@ -133,7 +140,6 @@ export default function DetalleProducto({
           </Typography>
         </Stack>
 
-        {/* MINIATURAS */}
         {imagenes.length > 1 && (
           <Stack direction="row" spacing={1}>
             {imagenes.map((img, i) => (
@@ -157,17 +163,15 @@ export default function DetalleProducto({
           </Stack>
         )}
 
-        {/* INFO */}
         <Box textAlign="center">
           <Typography variant="h5" fontWeight="bold">
-            {producto.nombre}
+            {prod.nombre}
           </Typography>
           <Typography sx={{ mt: 1 }}>
-            {producto.descripcion}
+            {prod.descripcion}
           </Typography>
         </Box>
 
-        {/* VARIANTES */}
         {tieneVariantes && modo === "compra" && (
           <Stack spacing={2} alignItems="center">
 
@@ -180,7 +184,7 @@ export default function DetalleProducto({
             )}
 
             <Stack direction="row" flexWrap="wrap" gap={1.5}>
-              {producto.variantes.map((v) => {
+              {(prod.variantes || []).map((v) => {
                 const isSelected = varianteSeleccionada?.id === v.id;
 
                 const label = [
@@ -218,7 +222,6 @@ export default function DetalleProducto({
           </Stack>
         )}
 
-        {/* BOTÓN */}
         <Button
           variant="contained"
           startIcon={<AddShoppingCartIcon />}
