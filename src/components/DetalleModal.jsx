@@ -31,11 +31,13 @@ export default function DetalleModal({
   
   const { isAuthenticated } = useAuth();
 
-  if (!producto) return null;
+  
 
   const [imagenActiva, setImagenActiva] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
-
+  
+  if (!producto) return null;
+  
   // 🖼 IMÁGENES
   const imagenes = useMemo(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
