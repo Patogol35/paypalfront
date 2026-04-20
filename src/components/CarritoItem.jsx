@@ -24,10 +24,10 @@ export default function CarritoItem({
   setCantidad,
   eliminarItem,
 }) {
-  // 🔥 STOCK (sin romper diseño)
+  // 🔥 STOCK (VARIANTE > PRODUCTO)
   const stock = it.variante?.stock ?? it.producto?.stock ?? 0;
 
-  // 🔥 IMAGEN (sin romper diseño)
+  // 🖼 IMAGEN DINÁMICA
   const imagen =
     it.variante?.imagenes?.[0]?.imagen ||
     it.producto?.imagenes?.[0]?.imagen ||
@@ -51,7 +51,18 @@ export default function CarritoItem({
             {it.producto?.nombre}
           </Typography>
 
-          {/* 🔥 NO mostramos talla/color como pediste */}
+          {/* 🔥 VARIANTE (solo valores) */}
+          {it.variante && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontWeight: 500 }}
+            >
+              {[it.variante.talla, it.variante.color]
+                .filter(Boolean)
+                .join(" • ")}
+            </Typography>
+          )}
 
           <Typography
             variant="body2"
