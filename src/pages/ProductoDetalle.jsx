@@ -16,6 +16,7 @@ import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
 import Slider from "react-slick";
@@ -230,7 +231,7 @@ useEffect(() => {
 
             <Button
               variant="contained"
-              startIcon={<ShoppingCartIcon />}
+              startIcon={<AddShoppingCartIcon />}
               onClick={handleAdd}
               disabled={
                 tieneVariantes
