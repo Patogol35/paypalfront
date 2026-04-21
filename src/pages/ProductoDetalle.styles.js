@@ -38,6 +38,14 @@ export const botonVolverSx = (theme) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.hover,
   },
+
+  // 🔥 quitar focus azul
+  "&:focus": {
+    outline: "none",
+  },
+  "&:focus-visible": {
+    outline: "none",
+  },
 });
 
 
@@ -80,7 +88,15 @@ export const imagenSlideSx = {
   height: { xs: 300, md: 500 },
   cursor: "pointer",
 
-  overflow: "hidden", // 🔥 evita saltos visuales
+  overflow: "hidden",
+
+  // 🔥 quitar cuadro azul
+  "&:focus": {
+    outline: "none",
+  },
+  "&:focus-visible": {
+    outline: "none",
+  },
 };
 
 
@@ -93,11 +109,18 @@ export const imagenSx = {
   objectFit: "contain",
   borderRadius: 3,
 
-  // 🔥 animación suave SIN zoom feo
   transition: "opacity 0.3s ease",
-
-  // 🔥 mejora rendimiento
   willChange: "opacity",
+
+  // 🔥 eliminar focus azul
+  outline: "none",
+
+  "&:focus": {
+    outline: "none",
+  },
+  "&:focus-visible": {
+    outline: "none",
+  },
 };
 
 
@@ -199,6 +222,14 @@ export const varianteBtnSx = (isSelected, stock, theme) => {
             : "rgba(0,0,0,0.05)"
           : undefined,
     },
+
+    // 🔥 quitar focus azul
+    "&:focus": {
+      outline: "none",
+    },
+    "&:focus-visible": {
+      outline: "none",
+    },
   };
 };
 
@@ -245,5 +276,13 @@ export const botonAgregarSx = (stock) => ({
 
   "&:hover": {
     transform: stock > 0 ? "scale(1.05)" : "none",
+  },
+
+  // 🔥 quitar focus azul
+  "&:focus": {
+    outline: "none",
+  },
+  "&:focus-visible": {
+    outline: "none",
   },
 });
