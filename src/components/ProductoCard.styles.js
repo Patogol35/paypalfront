@@ -93,9 +93,9 @@ export const chipNuevoSx = {
 // ================================
 export const contenidoSx = {
   p: 2.2,
-  
   display: "flex",
   flexDirection: "column",
+  flexGrow: 1, 
 };
 
 
