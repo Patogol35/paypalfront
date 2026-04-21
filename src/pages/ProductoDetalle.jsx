@@ -28,15 +28,13 @@ export default function ProductoDetalle() {
 
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
-
-  // 🔥 NUEVO: variante completa (igual que modal)
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
   if (!producto) return <Typography>Producto no encontrado</Typography>;
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🖼 IMÁGENES DINÁMICAS (igual que modal)
+  // IMÁGENES
   const imagenes = useMemo(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
       return varianteSeleccionada.imagenes.map((img) => img.imagen);
@@ -50,7 +48,6 @@ export default function ProductoDetalle() {
     return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
-  // 📸 imagen principal
   const [imagenActiva, setImagenActiva] = useState("");
 
   useEffect(() => {
@@ -61,13 +58,8 @@ export default function ProductoDetalle() {
     }
   }, [varianteSeleccionada, imagenes]);
 
-  const imagenSegura = imagenActiva || imagenes[0] || "";
+  const precioActual = varianteSeleccionada?.precio ?? producto.precio;
 
-  // 💰 precio dinámico
-  const precioActual =
-    varianteSeleccionada?.precio ?? producto.precio;
-
-  // 📦 stock
   const stockTotal = useMemo(() => {
     if (!producto.variantes?.length) return producto.stock || 1;
     return producto.variantes.reduce(
@@ -76,7 +68,6 @@ export default function ProductoDetalle() {
     );
   }, [producto]);
 
-  // 🛒 agregar
   const handleAdd = async () => {
     if (!isAuthenticated) {
       toast.error("Debes iniciar sesión");
@@ -94,7 +85,6 @@ export default function ProductoDetalle() {
         varianteSeleccionada?.id || null,
         1
       );
-
       toast.success(`"${producto.nombre}" agregado ✅`);
     } catch (e) {
       toast.error(e.message);
@@ -121,8 +111,14 @@ export default function ProductoDetalle() {
       <Button
         startIcon={<ArrowBackIcon />}
         variant="outlined"
-        sx={{ mb: 3, borderRadius: 2 }}
         onClick={() => navigate(-1)}
+        sx={{
+          mb: 3,
+          borderRadius: "999px",
+          textTransform: "none",
+          px: 2,
+          alignSelf: "flex-start",
+        }}
       >
         Regresar
       </Button>
@@ -130,12 +126,14 @@ export default function ProductoDetalle() {
       <Grid container spacing={5}>
         {/* IMÁGENES */}
         <Grid item xs={12} md={6}>
-          <Box sx={{
-            bgcolor: "#fafafa",
-            borderRadius: 3,
-            p: 2,
-            boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-          }}>
+          <Box
+            sx={{
+              bgcolor: "#fafafa",
+              borderRadius: 4,
+              p: 2,
+              boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+            }}
+          >
             <Slider {...settings}>
               {imagenes.map((img, i) => (
                 <Box
@@ -157,7 +155,9 @@ export default function ProductoDetalle() {
                       maxWidth: "100%",
                       maxHeight: "100%",
                       objectFit: "contain",
-                      borderRadius: 2,
+                      borderRadius: 3,
+                      transition: "0.4s",
+                      "&:hover": { transform: "scale(1.05)" },
                     }}
                   />
                 </Box>
@@ -168,7 +168,8 @@ export default function ProductoDetalle() {
 
         {/* DETALLE */}
         <Grid item xs={12} md={6}>
-          <Stack spacing={3}>
+          {/* 🔥 CLAVE: evita que todo se estire */}
+          <Stack spacing={3} alignItems="flex-start">
             <Typography variant="h4" fontWeight="bold">
               {producto.nombre}
             </Typography>
@@ -177,7 +178,7 @@ export default function ProductoDetalle() {
               ${precioActual}
             </Typography>
 
-            {/* 🔥 VARIANTES (igual que modal) */}
+            {/* VARIANTES */}
             {tieneVariantes && (
               <>
                 <Typography fontWeight="bold">
@@ -203,10 +204,23 @@ export default function ProductoDetalle() {
                         sx={{
                           borderRadius: "999px",
                           textTransform: "none",
-                          border: "1px solid #ddd",
-                          backgroundColor: isSelected ? "#111" : "#fff",
+                          px: 2,
+                          py: 0.6,
+
+                          width: "auto",
+                          minWidth: "unset",
+
+                          border: "1px solid",
+                          borderColor: isSelected ? "#1976d2" : "#ddd",
+
+                          backgroundColor: isSelected ? "#1976d2" : "#fff",
                           color: isSelected ? "#fff" : "#333",
+
                           opacity: v.stock === 0 ? 0.4 : 1,
+
+                          "&:hover": {
+                            transform: "scale(1.05)",
+                          },
                         }}
                       >
                         {label || "Única"}
@@ -218,6 +232,12 @@ export default function ProductoDetalle() {
                 {varianteSeleccionada && (
                   <Chip
                     label={`Stock: ${varianteSeleccionada.stock}`}
+                    sx={{
+                      width: "auto",
+                      alignSelf: "flex-start",
+                      borderRadius: "999px",
+                      fontWeight: 600,
+                    }}
                     color={
                       varianteSeleccionada.stock > 0
                         ? "success"
@@ -228,7 +248,7 @@ export default function ProductoDetalle() {
               </>
             )}
 
-            <Divider />
+            <Divider sx={{ width: "100%" }} />
 
             <Typography sx={{ color: "text.secondary" }}>
               {producto.descripcion}
@@ -237,7 +257,6 @@ export default function ProductoDetalle() {
             {/* BOTÓN */}
             <Button
               variant="contained"
-              size="large"
               startIcon={<ShoppingCartIcon />}
               onClick={handleAdd}
               disabled={
@@ -247,9 +266,20 @@ export default function ProductoDetalle() {
                   : stockTotal === 0
               }
               sx={{
-                borderRadius: 3,
-                py: 1.5,
-                background: "linear-gradient(135deg, #1976d2, #42a5f5)",
+                alignSelf: "flex-start",
+                width: "auto",
+
+                borderRadius: "999px",
+                px: 3,
+                py: 1.2,
+                fontWeight: 600,
+
+                background:
+                  "linear-gradient(135deg, #1976d2, #42a5f5)",
+
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             >
               {tieneVariantes
@@ -271,7 +301,12 @@ export default function ProductoDetalle() {
         <Box sx={{ position: "relative" }}>
           <IconButton
             onClick={() => setZoomOpen(false)}
-            sx={{ position: "absolute", top: 10, right: 10, color: "white" }}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "white",
+            }}
           >
             <CloseIcon />
           </IconButton>
@@ -285,4 +320,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-              }
+    }
