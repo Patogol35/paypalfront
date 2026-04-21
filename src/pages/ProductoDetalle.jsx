@@ -99,9 +99,10 @@ useEffect(() => {
 
   const handleAdd = async () => {
     if (!isAuthenticated) {
-      toast.error("Debes iniciar sesión");
-      return;
-    }
+  toast.info("Inicia sesión para agregar productos al carrito");
+  navigate("/login", { state: { from: location } });
+  return;
+}
 
     if (tieneVariantes && !varianteSeleccionada) {
       toast.warning("Selecciona una variante");
