@@ -167,8 +167,6 @@ export const variantesContainerSx = {
 export const varianteBtnSx = (isSelected, stock, theme) => {
   const isDark = theme.palette.mode === "dark";
 
-  const borderColorBase = isDark ? "#000" : "#fff"; // 🔥 clave
-
   return {
     borderRadius: "999px",
     textTransform: "none",
@@ -178,9 +176,13 @@ export const varianteBtnSx = (isSelected, stock, theme) => {
     py: 0.7,
 
     border: "1px solid",
-    borderColor: borderColorBase,
+    borderColor: isSelected
+  ? "#000"
+  : isDark
+  ? "#fff"   // 🌙 modo oscuro → blanco
+  : "#000",  // ☀️ modo claro → negro
 
-    // 🔥 fondo
+    // 🔥 fondo celeste por defecto
     backgroundColor: isSelected
       ? "#000"
       : isDark
@@ -204,6 +206,7 @@ export const varianteBtnSx = (isSelected, stock, theme) => {
     },
   };
 };
+
 
 // ================================
 // DESCRIPCIÓN
