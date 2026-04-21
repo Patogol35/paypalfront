@@ -3,8 +3,8 @@
 // ================================
 export const containerSx = {
   maxWidth: 1200,
-  mx: "auto",
-  p: { xs: 2, md: 4 },
+  margin: "0 auto",
+  padding: "24px",
 };
 
 
@@ -12,8 +12,8 @@ export const containerSx = {
 // BOTÓN VOLVER
 // ================================
 export const botonVolverSx = (theme) => ({
-  mb: 3,
-  borderRadius: 2,
+  marginBottom: 20,
+  borderRadius: 10,
   textTransform: "none",
   fontWeight: 500,
 
@@ -34,22 +34,14 @@ export const botonVolverSx = (theme) => ({
 
 
 // ================================
-// CONTENEDOR IMÁGENES
+// CONTENEDOR IMAGEN
 // ================================
 export const imagenContainerSx = (theme) => ({
-  bgcolor:
-    theme.palette.mode === "dark"
-      ? "#1f1f1f"
-      : "#fafafa",
+  backgroundColor:
+    theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5",
 
-  borderRadius: 3,
-  p: 2,
-
-  border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#e0e0e0",
+  borderRadius: 16,
+  padding: 16,
 
   boxShadow:
     theme.palette.mode === "dark"
@@ -59,13 +51,13 @@ export const imagenContainerSx = (theme) => ({
 
 
 // ================================
-// IMAGEN SLIDER
+// SLIDE IMAGEN
 // ================================
 export const imagenSlideSx = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: { xs: 300, md: 500 },
+  height: 420,
   cursor: "pointer",
 };
 
@@ -77,8 +69,8 @@ export const imagenSx = {
   maxWidth: "100%",
   maxHeight: "100%",
   objectFit: "contain",
-  borderRadius: 2,
-  transition: "transform 0.4s ease",
+  borderRadius: 12,
+  transition: "transform 0.3s ease",
 
   "&:hover": {
     transform: "scale(1.05)",
@@ -90,7 +82,8 @@ export const imagenSx = {
 // TÍTULO
 // ================================
 export const tituloSx = {
-  fontWeight: "bold",
+  fontWeight: 700,
+  lineHeight: 1.3,
 };
 
 
@@ -100,7 +93,6 @@ export const tituloSx = {
 export const precioSx = (theme) => ({
   fontWeight: 700,
   fontSize: "1.6rem",
-
   color:
     theme.palette.mode === "dark"
       ? "#4dabf5"
@@ -109,41 +101,40 @@ export const precioSx = (theme) => ({
 
 
 // ================================
-// VARIANTES BOTÓN
+// BOTÓN VARIANTE
 // ================================
 export const varianteBtnSx = (isSelected, stock, theme) => ({
   borderRadius: "999px",
   textTransform: "none",
   fontWeight: 500,
-  px: 2.5,
-  py: 1,
+  fontSize: "0.85rem",
+  padding: "6px 14px",
 
   border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#ddd",
+
+  borderColor: isSelected
+    ? theme.palette.primary.main
+    : theme.palette.mode === "dark"
+    ? "#555"
+    : "#ddd",
 
   backgroundColor: isSelected
-    ? theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#111"
-    : "transparent",
-
-  color: isSelected
-    ? theme.palette.mode === "dark"
-      ? "#000"
-      : "#fff"
+    ? theme.palette.primary.main
     : theme.palette.mode === "dark"
-      ? "#fff"
-      : "#333",
+    ? "#1f1f1f"
+    : "#fff",
+
+  color: isSelected ? "#fff" : theme.palette.text.primary,
 
   opacity: stock === 0 ? 0.4 : 1,
 
-  transition: "all 0.25s ease",
-
   "&:hover": {
-    transform: "scale(1.05)",
+    transform: stock > 0 ? "scale(1.05)" : "none",
+    backgroundColor: isSelected
+      ? theme.palette.primary.dark
+      : theme.palette.mode === "dark"
+      ? "#2a2a2a"
+      : "#f5f5f5",
   },
 });
 
@@ -154,6 +145,17 @@ export const varianteBtnSx = (isSelected, stock, theme) => ({
 export const descripcionSx = {
   color: "text.secondary",
   lineHeight: 1.6,
+  fontSize: "0.95rem",
+};
+
+
+// ================================
+// CHIP STOCK
+// ================================
+export const stockChipSx = {
+  alignSelf: "flex-start",
+  fontWeight: 600,
+  borderRadius: 8,
 };
 
 
@@ -161,18 +163,28 @@ export const descripcionSx = {
 // BOTÓN AGREGAR
 // ================================
 export const botonAgregarSx = (stock) => ({
-  borderRadius: 3,
-  py: 1.5,
+  borderRadius: 12,
+  padding: "10px 20px",
+
+  maxWidth: 280,   // 🔥 controla tamaño
+  width: "100%",
+  alignSelf: "flex-start",
+
   fontWeight: 600,
-  fontSize: "1rem",
+  fontSize: "0.95rem",
+  textTransform: "none",
 
   background:
     stock > 0
       ? "linear-gradient(135deg, #1976d2, #42a5f5)"
       : "#bdbdbd",
 
+  color: "#fff",
+
+  transition: "all 0.25s ease",
+
   "&:hover": {
-    transform: stock > 0 ? "scale(1.03)" : "none",
+    transform: stock > 0 ? "scale(1.04)" : "none",
     background:
       stock > 0
         ? "linear-gradient(135deg, #1565c0, #1e88e5)"
