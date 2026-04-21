@@ -53,8 +53,8 @@ export const imagenContainerSx = (theme) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  maxHeight: 250,
-  maxWidth: 260,
+  maxHeight: 280,
+  maxWidth: 240,
   border: "1px solid",
   borderColor:
     theme.palette.mode === "dark"
@@ -167,6 +167,8 @@ export const variantesContainerSx = {
 export const varianteBtnSx = (isSelected, stock, theme) => {
   const isDark = theme.palette.mode === "dark";
 
+  const borderColorBase = isDark ? "#000" : "#fff"; // 🔥 clave
+
   return {
     borderRadius: "999px",
     textTransform: "none",
@@ -176,9 +178,9 @@ export const varianteBtnSx = (isSelected, stock, theme) => {
     py: 0.7,
 
     border: "1px solid",
-    borderColor: isSelected ? "#000" : "#90caf9",
+    borderColor: borderColorBase,
 
-    // 🔥 fondo celeste por defecto
+    // 🔥 fondo
     backgroundColor: isSelected
       ? "#000"
       : isDark
