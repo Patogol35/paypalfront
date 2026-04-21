@@ -185,7 +185,11 @@ export const varianteBtnSx = (isSelected, stock, theme) => {
   : "#e3f2fd",
 
     // 🔥 TEXTO
-    color: isSelected ? "#fff" : theme.palette.text.primary,
+    color: isSelected
+  ? "#fff"
+  : isDark
+  ? "#000"
+  : theme.palette.text.primary,
 
     opacity: stock === 0 ? 0.4 : 1,
 
