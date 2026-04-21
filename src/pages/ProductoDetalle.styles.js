@@ -53,7 +53,7 @@ export const imagenContainerSx = (theme) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-
+maxHeight: 250,
   border: "1px solid",
   borderColor:
     theme.palette.mode === "dark"
