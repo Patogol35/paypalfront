@@ -191,12 +191,15 @@ export default function ProductoCard({ producto, onAgregar }) {
   fullWidth
   startIcon={<InfoIcon />}
   sx={botonAgregarSx(stockTotal)}
-  onClick={() => navigate(`/producto/${producto.id}`)}
+  onClick={() =>
+    navigate(`/producto/${producto.id}`, {
+      state: { producto }, 
+    })
+  }
   disabled={stockTotal === 0}
 >
-  {stockTotal > 0 ? "Ver opciones" : "Agotado"}
+  {stockTotal > 0 ? "Ver producto" : "Agotado"}
 </Button>
-
           {/* 🔵 BOTÓN DETALLES */}
           {/*
 <Button
