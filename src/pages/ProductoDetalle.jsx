@@ -176,7 +176,7 @@ export default function ProductoDetalle() {
                   Selecciona una opción:
                 </Typography>
 
-                <Stack sx={variantesContainerSx}>
+                <Stack direction="row" sx={variantesContainerSx}>
                   {producto.variantes.map((v) => {
                     const isSelected =
                       varianteSeleccionada?.id === v.id;
