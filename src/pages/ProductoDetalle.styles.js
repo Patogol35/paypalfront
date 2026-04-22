@@ -79,9 +79,7 @@ export const miniaturaSx = (activa) => ({
 
   opacity: activa ? 1 : 0.7,
 
-  boxShadow: activa
-    ? "0 6px 18px rgba(25,118,210,0.5)"
-    : "0 2px 8px rgba(0,0,0,0.15)",
+  boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
 
   transform: activa ? "scale(1.08)" : "scale(1)",
 
