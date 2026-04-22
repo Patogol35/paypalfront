@@ -47,7 +47,6 @@ export default function ProductoDetalle() {
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
-  const [imagenActiva, setImagenActiva] = useState("");
 
   useEffect(() => {
     const handleMenuOpen = () => setZoomOpen(false);
@@ -59,28 +58,36 @@ export default function ProductoDetalle() {
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🔥 OBTENER TODAS LAS IMÁGENES CORRECTAMENTE
+  // 🔥 NORMALIZADOR DE IMÁGENES (CLAVE)
   const imagenes = useMemo(() => {
-    // ✅ PRIORIDAD: imágenes de variante
+    const getImagen = (img) => {
+      if (!img) return null;
+      if (typeof img === "string") return img;
+      return img.imagen || img.url || img.src || null;
+    };
+
+    // ✅ VARIANTE
     if (varianteSeleccionada?.imagenes?.length > 0) {
-      return varianteSeleccionada.imagenes
-        .map((img) => img.imagen)
+      const imgs = varianteSeleccionada.imagenes
+        .map(getImagen)
         .filter(Boolean);
+
+      if (imgs.length > 0) return imgs;
     }
 
-    // ✅ FALLBACK: imágenes del producto
-    const imgs = [
+    // 🔥 fallback si backend usa "imagen" directa
+    if (varianteSeleccionada?.imagen) {
+      return [varianteSeleccionada.imagen];
+    }
+
+    // ✅ PRODUCTO
+    const productoImgs = [
       producto.imagen,
-      ...(producto.imagenes?.map((i) => i.imagen) || []),
+      ...(producto.imagenes || []).map(getImagen),
     ].filter(Boolean);
 
-    return [...new Set(imgs)];
+    return [...new Set(productoImgs)];
   }, [producto, varianteSeleccionada]);
-
-  // 🔥 SET IMAGEN ACTIVA
-  useEffect(() => {
-    setImagenActiva(imagenes[0] || "");
-  }, [imagenes]);
 
   const precioActual =
     varianteSeleccionada?.precio ?? producto.precio;
@@ -133,6 +140,7 @@ export default function ProductoDetalle() {
 
   return (
     <Box sx={containerSx}>
+      {/* VOLVER */}
       <Button
         startIcon={<ArrowBackIcon />}
         variant="outlined"
@@ -149,7 +157,7 @@ export default function ProductoDetalle() {
           <Box sx={imagenContainerSx(theme)}>
             <Slider
               {...settings}
-              key={varianteSeleccionada?.id || "producto"} // 🔥 FIX CLAVE
+              key={varianteSeleccionada?.id || "producto"} // 🔥 reinicia slider
             >
               {imagenes.map((img, i) => (
                 <Box
@@ -250,7 +258,7 @@ export default function ProductoDetalle() {
         </Grid>
       </Grid>
 
-      {/* ZOOM */}
+      {/* 🔍 ZOOM */}
       <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)} maxWidth="md">
         <Box
           sx={{
@@ -291,4 +299,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-    }
+}
