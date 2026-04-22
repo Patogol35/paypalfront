@@ -53,10 +53,6 @@ export default function ProductoDetalle() {
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  // 🔥 CLAVE: doble estado (sin vacío)
-  const [imagenActiva, setImagenActiva] = useState("");
-  const [imagenMostrada, setImagenMostrada] = useState("");
-
   if (!producto) return <Typography>Producto no encontrado</Typography>;
 
   const tieneVariantes = producto.variantes?.length > 0;
@@ -83,27 +79,24 @@ export default function ProductoDetalle() {
       .filter(Boolean);
   }, [producto, varianteSeleccionada]);
 
-  // 🔥 CARGA SIN VACÍO (como slider)
+  // 🔥 CLAVE: imagen inicial desde el primer render
+  const [imagenMostrada, setImagenMostrada] = useState(
+    imagenes[0] || ""
+  );
+
+  // 🔥 SOLO cambia cuando realmente cambia la lista
   useEffect(() => {
     if (imagenes.length > 0) {
-      const nueva = imagenes[0];
-
-      const img = new Image();
-      img.src = nueva;
-
-      img.onload = () => {
-        setImagenActiva(nueva);
-        setImagenMostrada(nueva);
-      };
+      setImagenMostrada(imagenes[0]);
     }
   }, [imagenes]);
 
+  // 🔥 CAMBIO SIN VACÍO
   const cambiarImagen = (imgUrl) => {
     const img = new Image();
     img.src = imgUrl;
 
     img.onload = () => {
-      setImagenActiva(imgUrl);
       setImagenMostrada(imgUrl);
     };
   };
@@ -142,7 +135,6 @@ export default function ProductoDetalle() {
 
   return (
     <Box sx={containerSx}>
-      {/* VOLVER */}
       <Button
         startIcon={<ArrowBackIcon />}
         variant="outlined"
@@ -158,7 +150,6 @@ export default function ProductoDetalle() {
         <Grid item xs={12} md={6}>
           <Box sx={imagenWrapperSx}>
 
-            {/* MINIATURAS */}
             {imagenes.length > 1 && (
               <Box sx={miniaturasContainerSx}>
                 {imagenes.map((img, i) => (
@@ -173,7 +164,6 @@ export default function ProductoDetalle() {
               </Box>
             )}
 
-            {/* IMAGEN PRINCIPAL */}
             <Box
               sx={{
                 ...imagenContainerSx(theme),
@@ -187,10 +177,7 @@ export default function ProductoDetalle() {
               <Box
                 component="img"
                 src={imagenMostrada}
-                sx={{
-                  ...imagenSx,
-                  transition: "opacity 0.3s ease",
-                }}
+                sx={imagenSx}
               />
             </Box>
 
