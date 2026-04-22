@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -12,15 +12,13 @@ import {
   IconButton,
   useTheme,
 } from "@mui/material";
-
 import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
-
 import Slider from "react-slick";
 
 import {
@@ -42,80 +40,58 @@ export default function ProductoDetalle() {
   const { state } = useLocation();
   const location = useLocation();
   const producto = state?.producto;
-
   const { agregarAlCarrito } = useCarrito();
   const { isAuthenticated } = useAuth();
-
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const sliderRef = useRef(null);
 
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
+useEffect(() => {
+  const handleMenuOpen = () => {
+    setZoomOpen(false);
+  };
 
-  // 🔥 cerrar zoom si se abre menú
-  useEffect(() => {
-    const handleMenuOpen = () => setZoomOpen(false);
-    window.addEventListener("menuOpen", handleMenuOpen);
-    return () => window.removeEventListener("menuOpen", handleMenuOpen);
-  }, []);
+  window.addEventListener("menuOpen", handleMenuOpen);
 
-  // 🔥 DEBUG (AQUÍ VA)
-  useEffect(() => {
-    console.log("PRODUCTO:", producto);
-    console.log("VARIANTE SELECCIONADA:", varianteSeleccionada);
-  }, [varianteSeleccionada]);
-
+  return () => {
+    window.removeEventListener("menuOpen", handleMenuOpen);
+  };
+}, []);
+  
   if (!producto) return <Typography>Producto no encontrado</Typography>;
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🔥 función flexible para leer imágenes
-  const getImageUrl = (img) => {
-    if (!img) return "";
-    if (typeof img === "string") return img;
-
-    return (
-      img.imagen ||
-      img.image ||
-      img.url ||
-      img.file ||
-      img.src ||
-      ""
-    );
-  };
-
   const imagenes = useMemo(() => {
-    let imgs = [];
-
     if (varianteSeleccionada?.imagenes?.length > 0) {
-      imgs = varianteSeleccionada.imagenes.map(getImageUrl);
+      return varianteSeleccionada.imagenes.map((img) => img.imagen);
     }
 
-    // fallback
-    if (imgs.length === 0) {
-      imgs = [
-        getImageUrl(producto.imagen),
-        ...(producto.imagenes?.map(getImageUrl) || []),
-      ];
-    }
+    const imgs = [
+      producto.imagen,
+      ...(producto.imagenes?.map((i) => i.imagen) || []),
+    ].filter(Boolean);
 
-    return [...new Set(imgs.filter(Boolean))];
+    return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
+  const [imagenActiva, setImagenActiva] = useState("");
+
   useEffect(() => {
-    if (sliderRef.current) {
-      sliderRef.current.slickGoTo(0);
+    if (varianteSeleccionada?.imagenes?.length > 0) {
+      setImagenActiva(varianteSeleccionada.imagenes[0].imagen);
+    } else {
+      setImagenActiva(imagenes[0] || "");
     }
-  }, [imagenes]);
+  }, [varianteSeleccionada, imagenes]);
 
   const precioActual =
     varianteSeleccionada?.precio ?? producto.precio;
 
   const stockTotal = useMemo(() => {
-    if (!producto.variantes?.length) return producto.stock || 0;
+    if (!producto.variantes?.length) return producto.stock || 1;
     return producto.variantes.reduce(
       (acc, v) => acc + (v.stock || 0),
       0
@@ -124,10 +100,10 @@ export default function ProductoDetalle() {
 
   const handleAdd = async () => {
     if (!isAuthenticated) {
-      toast.info("Inicia sesión para agregar productos");
-      navigate("/login", { state: { from: location } });
-      return;
-    }
+  toast.info("Inicia sesión para agregar productos al carrito");
+  navigate("/login", { state: { from: location } });
+  return;
+}
 
     if (tieneVariantes && !varianteSeleccionada) {
       toast.warning("Selecciona una variante");
@@ -154,7 +130,7 @@ export default function ProductoDetalle() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 400,
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
@@ -162,6 +138,7 @@ export default function ProductoDetalle() {
 
   return (
     <Box sx={containerSx}>
+      {/* VOLVER */}
       <Button
         startIcon={<ArrowBackIcon />}
         variant="outlined"
@@ -171,16 +148,17 @@ export default function ProductoDetalle() {
         Regresar
       </Button>
 
-      <Grid container spacing={5} justifyContent="center" alignItems="center">
-        
+      {/* 🔥 GRID CENTRADO REAL */}
+      <Grid
+        container
+        spacing={5}
+        justifyContent="center"
+        alignItems="center"
+      >
         {/* IMÁGENES */}
         <Grid item xs={12} md={6}>
           <Box sx={imagenContainerSx(theme)}>
-            <Slider
-              ref={sliderRef}
-              key={imagenes.join("-")}
-              {...settings}
-            >
+            <Slider {...settings}>
               {imagenes.map((img, i) => (
                 <Box
                   key={i}
@@ -196,8 +174,8 @@ export default function ProductoDetalle() {
 
         {/* DETALLE */}
         <Grid item xs={12} md={6}>
+          {/* 🔥 STACK CENTRADO */}
           <Stack spacing={3} alignItems="center">
-            
             <Typography variant="h4" sx={tituloSx}>
               {producto.nombre}
             </Typography>
@@ -282,34 +260,52 @@ export default function ProductoDetalle() {
       </Grid>
 
       {/* ZOOM */}
-      <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)} maxWidth="md">
-        <Box sx={{ position: "relative", bgcolor: theme.palette.background.default }}>
-          <IconButton
-            onClick={() => setZoomOpen(false)}
-            sx={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              zIndex: 2,
-              bgcolor: "rgba(0,0,0,0.7)",
-              color: "#fff",
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+      <Dialog
+  open={zoomOpen}
+  onClose={() => setZoomOpen(false)}
+  maxWidth="md"
+>
+  <Box
+    sx={{
+      position: "relative",
+      bgcolor: theme.palette.background.default, // 🔥 dinámico claro/oscuro
+    }}
+  >
+    {/* BOTÓN X */}
+    <IconButton
+  onClick={() => setZoomOpen(false)}
+  sx={{
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 2,
 
-          <Box
-            component="img"
-            src={zoomImage}
-            sx={{
-              maxHeight: "80vh",
-              maxWidth: "100%",
-              display: "block",
-              margin: "0 auto",
-            }}
-          />
-        </Box>
-      </Dialog>
+    bgcolor: "rgba(0,0,0,0.7)", // 🔥 siempre negro
+    color: "#fff",
+
+    "&:hover": {
+      bgcolor: "rgba(0,0,0,0.9)",
+    },
+  }}
+>
+  <CloseIcon />
+</IconButton>
+
+    {/* IMAGEN ZOOM */}
+    <Box
+      component="img"
+      src={zoomImage}
+      onClick={() => setZoomOpen(false)} // 👈 opcional (click para cerrar)
+      sx={{
+        maxHeight: "80vh",
+        maxWidth: "100%",
+        display: "block",
+        margin: "0 auto",
+        cursor: "zoom-out",
+      }}
+    />
+  </Box>
+</Dialog>
     </Box>
   );
 }
