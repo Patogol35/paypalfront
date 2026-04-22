@@ -58,23 +58,20 @@ export default function ProductoDetalle() {
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🔥 FUNCIÓN ROBUSTA PARA EXTRAER IMÁGENES
+  // 🔥 FUNCIÓN PARA EXTRAER IMÁGENES
   const extraerImagenes = (obj) => {
     if (!obj) return [];
 
     let imgs = [];
 
-    // caso array de imágenes [{imagen: url}]
     if (Array.isArray(obj.imagenes)) {
       imgs.push(...obj.imagenes.map((i) => i.imagen));
     }
 
-    // caso imagen única
     if (obj.imagen) {
       imgs.push(obj.imagen);
     }
 
-    // caso raro: string directa
     if (typeof obj.imagenes === "string") {
       imgs.push(obj.imagenes);
     }
@@ -156,16 +153,21 @@ export default function ProductoDetalle() {
       </Button>
 
       <Grid container spacing={5} justifyContent="center" alignItems="center">
-        {/* IMÁGENES */}
+        
+        {/* 🔥 IMÁGENES FIX */}
         <Grid item xs={12} md={6}>
           <Box sx={imagenContainerSx(theme)}>
-            <Slider key={varianteSeleccionada?.id || "producto"} {...settings}>
-              {imagenes.map((img, i) => (
-                <Box key={i} onClick={() => handleZoom(img)} sx={imagenSlideSx}>
-                  <Box component="img" src={img} sx={imagenSx} />
-                </Box>
-              ))}
-            </Slider>
+            {imagenes.length > 0 ? (
+              <Slider key={imagenes.join("-")} {...settings}>
+                {imagenes.map((img, i) => (
+                  <Box key={i} onClick={() => handleZoom(img)} sx={imagenSlideSx}>
+                    <Box component="img" src={img} sx={imagenSx} />
+                  </Box>
+                ))}
+              </Slider>
+            ) : (
+              <Typography align="center">Sin imágenes</Typography>
+            )}
           </Box>
         </Grid>
 
@@ -258,12 +260,7 @@ export default function ProductoDetalle() {
 
       {/* ZOOM */}
       <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)} maxWidth="md">
-        <Box
-          sx={{
-            position: "relative",
-            bgcolor: theme.palette.background.default,
-          }}
-        >
+        <Box sx={{ position: "relative", bgcolor: theme.palette.background.default }}>
           <IconButton
             onClick={() => setZoomOpen(false)}
             sx={{
@@ -295,4 +292,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-  }
+}
