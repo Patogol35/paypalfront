@@ -31,6 +31,15 @@ import {
   botonAgregarSx,
   stockSx,
   variantesContainerSx,
+
+  // 🔥 NUEVOS estilos
+  imagenWrapperSx,
+  miniaturasContainerSx,
+  miniaturaSx,
+  zoomContainerSx,
+  zoomCloseBtnSx,
+  zoomImagenSx,
+
 } from "./ProductoDetalle.styles";
 
 export default function ProductoDetalle() {
@@ -52,7 +61,6 @@ export default function ProductoDetalle() {
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🔥 NORMALIZAR IMÁGENES
   const getImagen = (img) => {
     if (!img) return null;
     if (typeof img === "string") return img;
@@ -107,7 +115,6 @@ export default function ProductoDetalle() {
         1
       );
 
-      // 🔥 TOAST COMO LO TENÍAS
       toast.success(`${producto.nombre} agregado al carrito 🛒`);
     } catch (e) {
       toast.error(e.message);
@@ -116,6 +123,7 @@ export default function ProductoDetalle() {
 
   return (
     <Box sx={containerSx}>
+
       {/* VOLVER */}
       <Button
         startIcon={<ArrowBackIcon />}
@@ -126,55 +134,28 @@ export default function ProductoDetalle() {
         Regresar
       </Button>
 
-      <Grid container spacing={5} justifyContent="center">
+      <Grid container spacing={5} justifyContent="center" alignItems="center">
 
-        {/* 🔥 IMÁGENES */}
+        {/* IMÁGENES */}
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              flexDirection: { xs: "column", md: "row" },
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <Box sx={imagenWrapperSx}>
 
             {/* MINIATURAS */}
             {imagenes.length > 1 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "row", md: "column" },
-                  gap: 1,
-                  overflowX: "auto",
-                }}
-              >
+              <Box sx={miniaturasContainerSx}>
                 {imagenes.map((img, i) => (
                   <Box
                     key={i}
                     component="img"
                     src={img}
                     onClick={() => setImagenActiva(img)}
-                    sx={{
-                      width: 65,
-                      height: 65,
-                      objectFit: "cover",
-                      borderRadius: 2,
-                      cursor: "pointer",
-                      border:
-                        imagenActiva === img
-                          ? "2px solid #1976d2"
-                          : "1px solid #ccc",
-                      opacity: imagenActiva === img ? 1 : 0.6,
-                      transition: "0.3s",
-                    }}
+                    sx={miniaturaSx(imagenActiva === img)}
                   />
                 ))}
               </Box>
             )}
 
-            {/* 🔥 IMAGEN PRINCIPAL (TU ESTILO) */}
+            {/* IMAGEN PRINCIPAL */}
             <Box
               sx={{
                 ...imagenContainerSx(theme),
@@ -185,11 +166,7 @@ export default function ProductoDetalle() {
                 setZoomOpen(true);
               }}
             >
-              <Box
-                component="img"
-                src={imagenActiva}
-                sx={imagenSx}
-              />
+              <Box component="img" src={imagenActiva} sx={imagenSx} />
             </Box>
 
           </Box>
@@ -286,18 +263,12 @@ export default function ProductoDetalle() {
         </Grid>
       </Grid>
 
-      {/* 🔍 ZOOM */}
+      {/* ZOOM */}
       <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)}>
-        <Box sx={{ position: "relative" }}>
+        <Box sx={zoomContainerSx(theme)}>
           <IconButton
             onClick={() => setZoomOpen(false)}
-            sx={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              bgcolor: "black",
-              color: "#fff",
-            }}
+            sx={zoomCloseBtnSx}
           >
             <CloseIcon />
           </IconButton>
@@ -305,15 +276,11 @@ export default function ProductoDetalle() {
           <Box
             component="img"
             src={zoomImage}
-            sx={{
-              maxHeight: "80vh",
-              maxWidth: "100%",
-              display: "block",
-              margin: "auto",
-            }}
+            sx={zoomImagenSx}
           />
         </Box>
       </Dialog>
+
     </Box>
   );
-            }
+                    }
