@@ -1,3 +1,4 @@
+
 import { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -49,7 +50,7 @@ export default function ProductoDetalle() {
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  // 🔥 Cerrar zoom si se abre menú
+  // cerrar zoom si se abre menú
   useEffect(() => {
     const handleMenuOpen = () => setZoomOpen(false);
     window.addEventListener("menuOpen", handleMenuOpen);
@@ -60,7 +61,7 @@ export default function ProductoDetalle() {
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  // 🖼 IMÁGENES DINÁMICAS
+  // 🔥 IMÁGENES DINÁMICAS
   const imagenes = useMemo(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
       return varianteSeleccionada.imagenes.map((img) => img.imagen);
@@ -74,7 +75,10 @@ export default function ProductoDetalle() {
     return [...new Set(imgs)];
   }, [producto, varianteSeleccionada]);
 
-  // 🖼 IMAGEN ACTIVA
+  // 🔥 DEBUG (puedes quitar luego)
+  console.log("VARIANTE:", varianteSeleccionada);
+  console.log("IMAGENES:", imagenes);
+
   const [imagenActiva, setImagenActiva] = useState("");
 
   useEffect(() => {
@@ -83,11 +87,9 @@ export default function ProductoDetalle() {
     }
   }, [imagenes]);
 
-  // 💰 PRECIO
   const precioActual =
     varianteSeleccionada?.precio ?? producto.precio;
 
-  // 📦 STOCK TOTAL
   const stockTotal = useMemo(() => {
     if (!producto.variantes?.length) return producto.stock || 1;
     return producto.variantes.reduce(
@@ -96,7 +98,6 @@ export default function ProductoDetalle() {
     );
   }, [producto]);
 
-  // 🛒 AGREGAR
   const handleAdd = async () => {
     if (!isAuthenticated) {
       toast.info("Inicia sesión para agregar productos al carrito");
@@ -121,13 +122,11 @@ export default function ProductoDetalle() {
     }
   };
 
-  // 🔍 ZOOM
   const handleZoom = (img) => {
     setZoomImage(img);
     setZoomOpen(true);
   };
 
-  // 🎞 CONFIG SLIDER
   const settings = {
     dots: true,
     infinite: true,
@@ -150,16 +149,13 @@ export default function ProductoDetalle() {
       </Button>
 
       <Grid container spacing={5} justifyContent="center" alignItems="center">
-        
+
         {/* 🖼 IMÁGENES */}
         <Grid item xs={12} md={6}>
           <Box sx={imagenContainerSx(theme)}>
-            
-            {/* 🔥 FIX CLAVE AQUÍ */}
-            <Slider
-              {...settings}
-              key={varianteSeleccionada?.id || "default"}
-            >
+
+            {/* 🔥 FIX DEFINITIVO */}
+            <Slider {...settings} key={imagenes.join("-")}>
               {imagenes.map((img, i) => (
                 <Box
                   key={i}
@@ -177,7 +173,7 @@ export default function ProductoDetalle() {
         {/* 📄 DETALLE */}
         <Grid item xs={12} md={6}>
           <Stack spacing={3} alignItems="center">
-            
+
             <Typography variant="h4" sx={tituloSx}>
               {producto.nombre}
             </Typography>
@@ -186,7 +182,6 @@ export default function ProductoDetalle() {
               ${precioActual}
             </Typography>
 
-            {/* 🔥 VARIANTES */}
             {tieneVariantes && (
               <>
                 <Typography fontWeight="bold">
@@ -232,7 +227,6 @@ export default function ProductoDetalle() {
               {producto.descripcion}
             </Typography>
 
-            {/* 🛒 BOTÓN */}
             <Button
               variant="contained"
               startIcon={<AddShoppingCartIcon />}
@@ -303,4 +297,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-                          }
+}
