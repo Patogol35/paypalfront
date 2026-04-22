@@ -52,8 +52,10 @@ export default function ProductoDetalle() {
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
+
+  // 🔥 CLAVE: doble estado (sin vacío)
   const [imagenActiva, setImagenActiva] = useState("");
-  const [loadingImg, setLoadingImg] = useState(true); // 🔥 NUEVO
+  const [imagenMostrada, setImagenMostrada] = useState("");
 
   if (!producto) return <Typography>Producto no encontrado</Typography>;
 
@@ -81,20 +83,30 @@ export default function ProductoDetalle() {
       .filter(Boolean);
   }, [producto, varianteSeleccionada]);
 
-  // 🔥 SET IMAGEN ACTIVA
+  // 🔥 CARGA SIN VACÍO (como slider)
   useEffect(() => {
     if (imagenes.length > 0) {
-      setImagenActiva(imagenes[0]);
+      const nueva = imagenes[0];
+
+      const img = new Image();
+      img.src = nueva;
+
+      img.onload = () => {
+        setImagenActiva(nueva);
+        setImagenMostrada(nueva);
+      };
     }
   }, [imagenes]);
 
-  // 🔥 PRELOAD (ULTRA IMPORTANTE)
-  useEffect(() => {
-    imagenes.forEach((img) => {
-      const i = new Image();
-      i.src = img;
-    });
-  }, [imagenes]);
+  const cambiarImagen = (imgUrl) => {
+    const img = new Image();
+    img.src = imgUrl;
+
+    img.onload = () => {
+      setImagenActiva(imgUrl);
+      setImagenMostrada(imgUrl);
+    };
+  };
 
   const precioActual =
     varianteSeleccionada?.precio ?? producto.precio;
@@ -154,11 +166,8 @@ export default function ProductoDetalle() {
                     key={i}
                     component="img"
                     src={img}
-                    onClick={() => {
-                      setLoadingImg(true); // 🔥 activa loader
-                      setImagenActiva(img);
-                    }}
-                    sx={miniaturaSx(imagenActiva === img)}
+                    onClick={() => cambiarImagen(img)}
+                    sx={miniaturaSx(imagenMostrada === img)}
                   />
                 ))}
               </Box>
@@ -171,18 +180,15 @@ export default function ProductoDetalle() {
                 cursor: "zoom-in",
               }}
               onClick={() => {
-                setZoomImage(imagenActiva);
+                setZoomImage(imagenMostrada);
                 setZoomOpen(true);
               }}
             >
-              {/* 🔥 IMAGEN CON FADE */}
               <Box
                 component="img"
-                src={imagenActiva}
-                onLoad={() => setLoadingImg(false)}
+                src={imagenMostrada}
                 sx={{
                   ...imagenSx,
-                  opacity: loadingImg ? 0 : 1,
                   transition: "opacity 0.3s ease",
                 }}
               />
@@ -285,17 +291,13 @@ export default function ProductoDetalle() {
       {/* ZOOM */}
       <Dialog open={zoomOpen} onClose={() => setZoomOpen(false)}>
         <Box sx={zoomContainerSx(theme)}>
-          <IconButton
-            onClick={() => setZoomOpen(false)}
-            sx={zoomCloseBtnSx}
-          >
+          <IconButton onClick={() => setZoomOpen(false)} sx={zoomCloseBtnSx}>
             <CloseIcon />
           </IconButton>
 
           <Box component="img" src={zoomImage} sx={zoomImagenSx} />
         </Box>
       </Dialog>
-
     </Box>
   );
-      }
+}
