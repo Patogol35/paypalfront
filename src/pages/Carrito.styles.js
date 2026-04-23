@@ -93,8 +93,14 @@ const styles = {
   }),
 
   emptyState: {
-  mt: 6,
+  mt: 8,
   textAlign: "center",
+},
+
+emptyIcon: {
+  fontSize: 70,
+  opacity: 0.5,
+  mb: 1,
 },
 
 emptyTitle: (theme) => ({
@@ -108,7 +114,13 @@ emptySubtitle: (theme) => ({
     theme.palette.mode === "dark"
       ? "rgba(255,255,255,0.8)"
       : "#666",
+  mb: 2,
 }),
+
+emptyButton: {
+  mt: 1,
+  borderRadius: 2,
+},
 };
 
 export default styles;
