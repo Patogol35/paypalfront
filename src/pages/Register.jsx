@@ -316,12 +316,14 @@ export default function Register() {
             </Button>
 
             <Button
-              variant="outlined"
-              fullWidth
-              onClick={() => navigate("/login")}
-            >
-              Ya tengo cuenta
-            </Button>
+  variant="outlined"
+  fullWidth
+  onClick={() => navigate("/login")}
+  sx={registerStyles.botonRegister(theme)}
+>
+  Ya tengo cuenta
+</Button>
+            
           </Box>
         </form>
 
