@@ -16,12 +16,11 @@ export function AuthProvider({ children }) {
     const savedAccess = localStorage.getItem("access");
     const savedRefresh = localStorage.getItem("refresh");
 
-    if (savedAccess) setAccess(savedAccess);
-    if (savedRefresh) setRefresh(savedRefresh);
-
-    // 👇 Si NO hay token, terminamos loading de una
-    if (!savedAccess) {
-      setLoading(false);
+    if (savedAccess) {
+      setAccess(savedAccess);
+      setRefresh(savedRefresh);
+    } else {
+      setLoading(false); // 👈 sin token → no esperar nada
     }
   }, []);
 
@@ -42,7 +41,7 @@ export function AuthProvider({ children }) {
         console.error("Error obteniendo perfil:", err);
         setUser(null);
       } finally {
-        setLoading(false);
+        setLoading(false); // 👈 termina loading aquí
       }
     };
 
@@ -52,11 +51,14 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!access;
 
   // =====================
-  // 🔐 LOGIN
+  // 🔐 LOGIN (NORMAL + GOOGLE)
   // =====================
   const login = (accessToken, refreshToken) => {
+    setLoading(true); // 👈 CLAVE: evita parpadeo
+
     localStorage.setItem("access", accessToken);
     localStorage.setItem("refresh", refreshToken);
+
     setAccess(accessToken);
     setRefresh(refreshToken);
   };
