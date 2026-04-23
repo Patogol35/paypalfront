@@ -1,38 +1,40 @@
 const registerStyles = {
   container: (theme) => ({
-  minHeight: "75vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  p: 2,
+    minHeight: "75vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    p: 2,
+  }),
 
+  paper: (theme) => ({
+  p: 4,
+  borderRadius: 3,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
+
+  //  BORDE
   border: "1px solid",
   borderColor:
     theme.palette.mode === "dark"
       ? "#ffffff"
       : "#000000",
 
-  borderRadius: 3, 
-}),
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 12px 24px rgba(0,0,0,0.5)"
+      : "0 12px 24px rgba(0,0,0,0.15)",
 
-  paper: (theme) => ({
-    p: 4,
-    borderRadius: 3,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: 3,
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 12px 24px rgba(0,0,0,0.5)"
-        : "0 12px 24px rgba(0,0,0,0.15)",
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? "#1e1e1e"
-        : "rgba(255,255,255,0.95)",
-    color: theme.palette.mode === "dark" ? "#fff" : "#000",
-    backdropFilter: "blur(8px)",
-  }),
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "#1e1e1e"
+      : "rgba(255,255,255,0.95)",
+
+  color: theme.palette.mode === "dark" ? "#fff" : "#000",
+  backdropFilter: "blur(8px)",
+}),
 
   titulo: (theme) => ({
     color: theme.palette.mode === "dark" ? "#42a5f5" : "#1976d2",
