@@ -42,6 +42,7 @@ export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [authenticating, setAuthenticating] = useState(false); // 👈 NUEVO
 
   // =====================
   // HANDLERS
@@ -106,7 +107,7 @@ export default function Login() {
 
       login(data.access, data.refresh);
       toast.success(`Bienvenido/a, ${form.username} 👋`);
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
       handleErrors(error);
     } finally {
@@ -121,6 +122,8 @@ export default function Login() {
     if (!credentialResponse?.credential) {
       return toast.error("Error con Google");
     }
+
+    setAuthenticating(true); // 👈 BLOQUEA UI
 
     try {
       const res = await fetch(
@@ -143,13 +146,30 @@ export default function Login() {
       }
 
       login(data.access, data.refresh);
-      toast.success("Bienvenido con Google");
-      navigate("/");
+
+      navigate("/", { replace: true }); // 👈 navegación limpia
     } catch (error) {
       console.error(error);
       toast.error("Error al iniciar con Google");
+      setAuthenticating(false); // 👈 solo si falla
     }
   };
+
+  // =====================
+  // BLOQUEO VISUAL (ANTI PARPADEO)
+  // =====================
+  if (authenticating) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Container maxWidth="xs" sx={loginStyles.container(theme)}>
@@ -260,4 +280,4 @@ export default function Login() {
       </Paper>
     </Container>
   );
-            }
+}
