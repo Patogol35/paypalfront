@@ -217,10 +217,9 @@ export default function Register() {
         </Typography>
 
         <Typography
-          align="center"
-          color="text.secondary"
-          sx={registerStyles.subtitulo}
-        >
+  align="center"
+  sx={registerStyles.subtitulo(theme)}
+>
           Completa tus datos para registrarte
         </Typography>
 
