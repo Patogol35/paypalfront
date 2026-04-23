@@ -70,7 +70,6 @@ const validators = {
   },
 };
 
-// ---------- ERROR HANDLER ----------
 const traducirError = (resp) => {
   if (resp?.username?.[0] === "A user with that username already exists.")
     return "El nombre de usuario ya está registrado";
@@ -146,7 +145,6 @@ export default function Register() {
     }
   };
 
-  // ---------- GOOGLE ----------
   const handleGoogleSuccess = async ({ credential }) => {
     if (!credential) return toast.error("Error con Google");
 
@@ -197,7 +195,6 @@ export default function Register() {
     [form, handleChange]
   );
 
-  // ---------- SPINNER GLOBAL ----------
   if (authenticating) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -228,20 +225,9 @@ export default function Register() {
         </Typography>
 
         <form onSubmit={handleSubmit} noValidate>
-          {renderInput(
-            "Usuario",
-            "username",
-            <PersonOutline color="action" />,
-            "username"
-          )}
+          {renderInput("Usuario", "username", <PersonOutline color="action" />)}
 
-          {renderInput(
-            "Correo",
-            "email",
-            <EmailOutlined color="action" />,
-            "email",
-            "email"
-          )}
+          {renderInput("Correo", "email", <EmailOutlined color="action" />, "email", "email")}
 
           {renderInput(
             "Contraseña",
@@ -288,13 +274,14 @@ export default function Register() {
             sx={registerStyles.checkbox}
           />
 
-          <Box mt={3} display="flex" flexDirection="column" gap={2}>
+          {/* 🔥 BOTONES IGUAL QUE LOGIN */}
+          <Box sx={registerStyles.acciones}>
             <Button
               type="submit"
               variant="contained"
               fullWidth
               disabled={isBlocked}
-              sx={registerStyles.boton(theme)}
+              sx={registerStyles.botonRegister(theme)}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
@@ -307,7 +294,7 @@ export default function Register() {
               variant="outlined"
               fullWidth
               onClick={() => navigate("/login")}
-              sx={registerStyles.botonRegister(theme)}
+              sx={registerStyles.botonLogin(theme)}
             >
               Ya tengo cuenta
             </Button>
@@ -329,4 +316,4 @@ export default function Register() {
       </Paper>
     </Container>
   );
-      }
+        }
