@@ -40,6 +40,23 @@ const pedidosStyles = {
   chip: {
     mt: { xs: 1, sm: 0 },
   },
+
+  emptyState: {
+    mt: 4,
+    textAlign: "center",
+  },
+
+  emptyTitle: (theme) => ({
+    fontWeight: "bold",
+    color: theme.palette.text.primary,
+  }),
+
+  emptySubtitle: (theme) => ({
+    color:
+      theme.palette.mode === "dark"
+        ? "#f5f5f5"
+        : "#666",
+  }),
 };
 
 export default pedidosStyles;
