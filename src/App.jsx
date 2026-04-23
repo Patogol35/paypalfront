@@ -15,10 +15,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
 // =====================
-// 🔐 RUTA PÚBLICA (bloquea login si ya hay sesión)
+// 🔓 RUTAS PÚBLICAS CONTROLADAS
 // =====================
 function PublicRoute({ children }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null; // 👈 evita parpadeo
+
   return !user ? children : <Navigate to="/" replace />;
 }
 
@@ -53,7 +56,7 @@ function App() {
                   }
                 />
 
-                {/* CARRITO (PROTEGIDO) */}
+                {/* CARRITO */}
                 <Route
                   path="/carrito"
                   element={
@@ -63,7 +66,7 @@ function App() {
                   }
                 />
 
-                {/* PEDIDOS (PROTEGIDO) */}
+                {/* PEDIDOS */}
                 <Route
                   path="/pedidos"
                   element={
@@ -73,7 +76,7 @@ function App() {
                   }
                 />
 
-                {/* DETALLE PRODUCTO */}
+                {/* PRODUCTO */}
                 <Route
                   path="/producto/:id"
                   element={<ProductoDetalle />}
