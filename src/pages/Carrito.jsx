@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { crearPedido } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -109,6 +110,11 @@ export default function Carrito() {
       {/* VACÍO */}
 {!loading && items.length === 0 && (
   <Box sx={styles.emptyState}>
+    <RemoveShoppingCartIcon
+      color="disabled"
+      sx={styles.emptyIcon}
+    />
+
     <Typography
       variant="h6"
       sx={styles.emptyTitle(theme)}
@@ -122,6 +128,14 @@ export default function Carrito() {
     >
       Agrega productos para comenzar tu compra
     </Typography>
+
+    <Button
+      variant="contained"
+      sx={styles.emptyButton}
+      onClick={() => navigate("/")}
+    >
+      Ir a comprar
+    </Button>
   </Box>
 )}
 
