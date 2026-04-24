@@ -156,9 +156,8 @@ export default function Carrito() {
       {/* FOOTER */}
       {!loading && items.length > 0 && (
         <Box sx={styles.footerBox(theme)}>
-          <Divider sx={styles.divider} />
-
-          <Typography variant="h6" sx={styles.total(theme)}>
+        
+       <Typography variant="h6" sx={styles.total(theme)}>
             <MonetizationOnIcon fontSize="small" />
             Total: {total.toFixed(2)}
           </Typography>
