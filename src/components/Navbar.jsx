@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useThemeMode } from "../context/ThemeContext";
@@ -40,6 +40,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [pendingLogout, setPendingLogout] = useState(false);
   const scrolled = useScrollTrigger(50);
   const [menuSnapshot, setMenuSnapshot] = useState(
     isAuthenticated ? authMenu : guestMenu
@@ -66,12 +67,17 @@ export default function Navbar() {
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
   const handleLogout = useCallback(() => {
-    handleCloseMenu(); // cerrar primero
-    setTimeout(() => {
+    setPendingLogout(true);
+    handleCloseMenu();
+  }, [handleCloseMenu]);
+
+  const handleDrawerTransitionEnd = () => {
+    if (!open && pendingLogout) {
       logout();
       navigate("/login");
-    }, 200); 
-  }, [logout, navigate, handleCloseMenu]);
+      setPendingLogout(false);
+    }
+  };
 
   const textColor = () => "#fff";
 
@@ -177,6 +183,7 @@ export default function Navbar() {
         anchor="right"
         open={open}
         onClose={handleCloseMenu}
+        onTransitionEnd={handleDrawerTransitionEnd} 
         sx={{ display: { xs: "block", md: "none" } }}
         PaperProps={{
           sx: (theme) => styles.drawerPaper(theme),
@@ -210,4 +217,4 @@ export default function Navbar() {
       </Drawer>
     </>
   );
-}
+                       }
