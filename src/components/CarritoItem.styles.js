@@ -87,10 +87,23 @@ controlesWrapper: (theme) => ({
   p: 2,
   gap: 1.5,
 
-  borderLeft: { sm: `1px solid ${theme.palette.divider}` },
-  borderTop: { xs: `1px solid ${theme.palette.divider}`, sm: "none" },
-}),
+  position: "relative",
 
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: { xs: 0, sm: 0 },
+    left: { xs: 0, sm: 0 },
+
+    width: { xs: "100%", sm: "1px" },
+    height: { xs: "1px", sm: "100%" },
+
+    background:
+      theme.palette.mode === "dark"
+        ? "linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)"
+        : "linear-gradient(to right, transparent, rgba(0,0,0,0.2), transparent)",
+  },
+}),
 cantidadWrapper: {
 display: "flex",
 alignItems: "center",
