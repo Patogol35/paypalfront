@@ -3,25 +3,16 @@
 // ================================
 export const cardSx = (theme) => ({
   width: 320,
-  
-  justifyContent: "space-between",
   borderRadius: 3,
 
-  // Fondo principal 
-  bgcolor:
-    theme.palette.mode === "dark"
-      ? "#1f1f1f"   // gris oscuro elegante
-      : "#ffffff",
+  bgcolor: theme.palette.background.paper,
 
   border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "#ffffff"   
-      : "#000000",
+  borderColor: theme.palette.divider,
 
   boxShadow:
     theme.palette.mode === "dark"
-      ? "0 8px 24px rgba(0,0,0,0.45)"
+      ? "0 8px 24px rgba(0,0,0,0.5)"
       : "0 8px 22px rgba(0,0,0,0.12)",
 
   overflow: "hidden",
@@ -48,10 +39,7 @@ export const imagenBoxSx = (theme) => ({
   alignItems: "center",
   justifyContent: "center",
 
-  bgcolor:
-    theme.palette.mode === "dark"
-      ? "#2c2c2c"   // más claro que la card
-      : "#f2f4f7",  // gris suave visible en light
+  bgcolor: theme.palette.action.hover,
 
   overflow: "hidden",
 });
@@ -96,7 +84,7 @@ export const contenidoSx = {
   p: 2.2,
   display: "flex",
   flexDirection: "column",
-  flexGrow: 1, 
+  flexGrow: 1,
 };
 
 
@@ -119,22 +107,21 @@ export const tituloSx = {
 // PRECIO
 // ================================
 export const precioStackSx = (theme) => ({
-  mb: 0.8, // 🔥 AQUÍ haces el cambio
+  mb: 0.8,
   fontSize: "1.3rem",
   fontWeight: 700,
-  color:
-    theme.palette.mode === "dark"
-      ? "#4dabf5"
-      : "#1976d2",
+  color: theme.palette.primary.main,
 });
 
 
 // ================================
 // DIVIDER
 // ================================
-export const dividerSx = {
+export const dividerSx = (theme) => ({
   my: 1.2,
-};
+  borderColor: theme.palette.divider,
+});
+
 
 // ================================
 // BOTÓN AGREGAR
@@ -161,9 +148,6 @@ export const botonAgregarSx = (stock) => ({
         ? "linear-gradient(135deg, #1565c0, #1e88e5)"
         : "#bdbdbd",
   },
-
-  "&:focus": { outline: "none" },
-  "&:focus-visible": { outline: "none" },
 });
 
 
@@ -178,27 +162,15 @@ export const botonDetallesSx = (theme) => ({
   fontSize: "0.9rem",
 
   border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#000000",
+  borderColor: theme.palette.divider,
 
-  color:
-    theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#000000",
+  color: theme.palette.text.primary,
 
   backgroundColor: "transparent",
   transition: "all 0.25s ease",
 
   "&:hover": {
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? "rgba(255,255,255,0.08)"
-        : "rgba(0,0,0,0.05)",
+    backgroundColor: theme.palette.action.hover,
     transform: "scale(1.03)",
   },
-
-  "&:focus": { outline: "none" },
-  "&:focus-visible": { outline: "none" },
 });
