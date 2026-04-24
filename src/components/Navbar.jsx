@@ -58,17 +58,19 @@ export default function Navbar() {
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
   // ✅ LOGOUT
-  const handleLogout = useCallback(() => {
+ const handleLogout = useCallback(() => {
   setOpen(false);
 
-  logout();
+  // 👇 ejecuta en el siguiente ciclo
+  setTimeout(() => {
+    logout();
+    navigate("/login", { replace: true });
+  }, 0);
 
   toast.success("Sesión cerrada correctamente 👋", {
     position: "top-right",
     autoClose: 2000,
   });
-
-  navigate("/login", { replace: true });
 }, [logout, navigate]);
 
   const textColor = () => "#fff";
