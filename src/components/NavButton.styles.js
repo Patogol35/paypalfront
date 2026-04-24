@@ -8,15 +8,16 @@ const navButtonStyles = (theme, isActive, item, alwaysColoredPaths) => ({
   py: 1.2,
   transition: "all 0.25s ease",
 
-  // 🔥 ICONO DINÁMICO (arreglo sin romper diseño)
+  
   "& .MuiButton-startIcon": {
-    color:
-      isActive || alwaysColoredPaths.includes(item.path)
-        ? "#fff"
-        : theme.palette.text.primary,
+    color: "#fff",
+    filter:
+      !isActive && !alwaysColoredPaths.includes(item.path)
+        ? "drop-shadow(0 0 2px rgba(0,0,0,0.6))"
+        : "none",
   },
 
-  // Fondo dinámico
+  // 🎨 Fondo dinámico
   background: {
     xs: item.color,
     md:
@@ -25,11 +26,11 @@ const navButtonStyles = (theme, isActive, item, alwaysColoredPaths) => ({
         : "transparent",
   },
 
-  // Estado activo
+  // ✨ Estado activo
   boxShadow: isActive ? "0 0 20px rgba(255,255,255,0.5)" : "none",
   transform: isActive ? "scale(1.04)" : "scale(1)",
 
-  // HOVER
+  // 🚀 Hover
   "&:hover": {
     background: {
       xs: item.color,
@@ -41,7 +42,7 @@ const navButtonStyles = (theme, isActive, item, alwaysColoredPaths) => ({
     filter: "brightness(1.1)",
   },
 
-  // Dark mode
+  // 🌙 Dark mode
   ...(theme.palette.mode === "dark" && {
     color: "#fff",
     "&:hover": {
