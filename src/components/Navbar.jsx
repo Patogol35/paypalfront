@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useCallback } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useThemeMode } from "../context/ThemeContext";
 import { useScrollTrigger } from "../hooks/useScrollTrigger";
@@ -35,24 +35,19 @@ import styles from "./Navbar.styles";
 const MotionAppBar = motion(AppBar);
 
 export default function Navbar() {
-  const { isAuthenticated, logout, user, loading } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const { mode, toggleMode } = useThemeMode();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 🔥 Oculta Navbar en rutas públicas (evita flicker al logout)
+  const hideNavbarRoutes = ["/login", "/register"];
+  if (hideNavbarRoutes.includes(location.pathname)) return null;
 
   const [open, setOpen] = useState(false);
   const scrolled = useScrollTrigger(50);
 
-  // ✅ 🔥 PRO FIX: persistir último estado válido
-  const lastAuthRef = useRef(isAuthenticated);
-
-  useEffect(() => {
-    if (!loading) {
-      lastAuthRef.current = isAuthenticated;
-    }
-  }, [isAuthenticated, loading]);
-
-  const effectiveAuth = loading ? lastAuthRef.current : isAuthenticated;
-  const menu = effectiveAuth ? authMenu : guestMenu;
+  const menu = isAuthenticated ? authMenu : guestMenu;
 
   const handleToggleMenu = useCallback(() => {
     setOpen((prev) => {
@@ -67,22 +62,24 @@ export default function Navbar() {
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
   const handleLogout = useCallback(() => {
-  setOpen(false);
+    setOpen(false);
 
-  navigate("/login", { replace: true }); // 👈 PRIMERO
+    // 👉 Navega primero para que el Navbar se oculte
+    navigate("/login", { replace: true });
 
-  logout(); // 👈 DESPUÉS
+    // 👉 Luego limpia auth
+    logout();
 
-  toast.success("Sesión cerrada correctamente 👋", {
-    position: "top-right",
-    autoClose: 2000,
-  });
-}, [logout, navigate]);
+    toast.success("Sesión cerrada correctamente 👋", {
+      position: "top-right",
+      autoClose: 2000,
+    });
+  }, [logout, navigate]);
 
   const textColor = () => "#fff";
 
   const UserSection = ({ showLogout = true, mobile = false }) =>
-    effectiveAuth && (
+    isAuthenticated && (
       <Stack
         direction={mobile ? "column" : "row"}
         spacing={1.5}
@@ -184,7 +181,7 @@ export default function Navbar() {
 
           <MenuList onClick={handleCloseMenu} />
 
-          {effectiveAuth && (
+          {isAuthenticated && (
             <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={handleLogout}
@@ -205,4 +202,4 @@ export default function Navbar() {
       </Drawer>
     </>
   );
-          }
+}
