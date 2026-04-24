@@ -16,7 +16,6 @@ import {
   IconButton,
 } from "@mui/material";
 
-import { useTheme } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PersonOutline from "@mui/icons-material/PersonOutline";
@@ -35,7 +34,6 @@ const validators = {
 };
 
 export default function Login() {
-  const theme = useTheme();
   const navigate = useNavigate();
   const { login, isAuthenticated, loading: authLoading } = useAuth();
 
@@ -116,7 +114,6 @@ export default function Login() {
 
       login(data.access, data.refresh);
       toast.success(`Bienvenido/a, ${form.username || "usuario"} 👋`);
-    
     } catch (error) {
       handleErrors(error);
     } finally {
@@ -139,9 +136,7 @@ export default function Login() {
         "https://backvariantes.onrender.com/api/google-login/",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token: credentialResponse.credential,
           }),
@@ -165,7 +160,7 @@ export default function Login() {
   };
 
   // =====================
-  // BLOQUEO GLOBAL (SPINNER)
+  // BLOQUEO GLOBAL
   // =====================
   if (authLoading || authenticating) {
     return (
@@ -181,25 +176,25 @@ export default function Login() {
   }
 
   return (
-    <Container maxWidth="xs" sx={loginStyles.container(theme)}>
-      <Paper elevation={8} sx={loginStyles.paper(theme)}>
+    <Container maxWidth="xs" sx={(theme) => loginStyles.container(theme)}>
+      <Paper elevation={8} sx={(theme) => loginStyles.paper(theme)}>
         <Typography
           variant="h4"
           align="center"
           fontWeight="bold"
           gutterBottom
-          sx={loginStyles.titulo(theme)}
+          sx={(theme) => loginStyles.titulo(theme)}
         >
           Bienvenido
         </Typography>
 
         <Typography
-  variant="body1"
-  align="center"
-  sx={loginStyles.subtitulo(theme)}
->
-  Ingresa tus credenciales para continuar
-</Typography>
+          variant="body1"
+          align="center"
+          sx={(theme) => loginStyles.subtitulo(theme)}
+        >
+          Ingresa tus credenciales para continuar
+        </Typography>
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -248,7 +243,7 @@ export default function Login() {
               variant="contained"
               fullWidth
               disabled={loading || authenticating}
-              sx={loginStyles.botonLogin(theme)}
+              sx={(theme) => loginStyles.botonLogin(theme)}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
@@ -261,7 +256,7 @@ export default function Login() {
               variant="outlined"
               fullWidth
               onClick={() => navigate("/register")}
-              sx={loginStyles.botonRegister(theme)}
+              sx={(theme) => loginStyles.botonRegister(theme)}
             >
               Registrarse
             </Button>
