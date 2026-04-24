@@ -116,7 +116,6 @@ export default function Login() {
 
       login(data.access, data.refresh);
       toast.success(`Bienvenido/a, ${form.username || "usuario"} 👋`);
-    
     } catch (error) {
       handleErrors(error);
     } finally {
@@ -165,9 +164,9 @@ export default function Login() {
   };
 
   // =====================
-  // BLOQUEO GLOBAL (SPINNER)
+  // 🔥 BLOQUEO TOTAL (SIN FLICKER)
   // =====================
-  if (authLoading || authenticating) {
+  if (authLoading || authenticating || isAuthenticated) {
     return (
       <Box
         display="flex"
@@ -194,12 +193,12 @@ export default function Login() {
         </Typography>
 
         <Typography
-  variant="body1"
-  align="center"
-  sx={loginStyles.subtitulo(theme)}
->
-  Ingresa tus credenciales para continuar
-</Typography>
+          variant="body1"
+          align="center"
+          sx={loginStyles.subtitulo(theme)}
+        >
+          Ingresa tus credenciales para continuar
+        </Typography>
 
         <form onSubmit={handleSubmit}>
           <TextField
