@@ -67,17 +67,17 @@ export default function Navbar() {
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
   const handleLogout = useCallback(() => {
-    setOpen(false);
+  setOpen(false);
 
-    logout();
+  navigate("/login", { replace: true }); // 👈 PRIMERO
 
-    navigate("/login", { replace: true });
+  logout(); // 👈 DESPUÉS
 
-    toast.success("Sesión cerrada correctamente 👋", {
-      position: "top-right",
-      autoClose: 2000,
-    });
-  }, [logout, navigate]);
+  toast.success("Sesión cerrada correctamente 👋", {
+    position: "top-right",
+    autoClose: 2000,
+  });
+}, [logout, navigate]);
 
   const textColor = () => "#fff";
 
