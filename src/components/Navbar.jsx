@@ -35,15 +35,12 @@ import styles from "./Navbar.styles";
 const MotionAppBar = motion(AppBar);
 
 export default function Navbar() {
-  const { isAuthenticated, logout, user, loading } = useAuth(); // 👈 loading añadido
+  const { isAuthenticated, logout, user } = useAuth();
   const { mode, toggleMode } = useThemeMode();
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const scrolled = useScrollTrigger(50);
-
-  // 👇 evita render mientras cambia auth (CLAVE)
-  if (loading) return null;
 
   const menuItems = useMemo(
     () => (isAuthenticated ? authMenu : guestMenu),
@@ -51,25 +48,23 @@ export default function Navbar() {
   );
 
   const handleToggleMenu = useCallback(() => {
-    setOpen((prev) => {
-      const next = !prev;
+  setOpen((prev) => {
+    const next = !prev;
 
-      if (next) {
-        window.dispatchEvent(new Event("menuOpen"));
-      }
+    if (next) {
+      window.dispatchEvent(new Event("menuOpen")); // 👈 AQUÍ
+    }
 
-      return next;
-    });
-  }, []);
+    return next;
+  });
+}, []);
 
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
-  const handleLogout = useCallback(async () => {
-    handleCloseMenu(); // 👈 primero UI
-
-    await logout(); // 👈 espera (aunque no sea async, deja preparado)
-
-    navigate("/login", { replace: true }); // 👈 mejor navegación
+  const handleLogout = useCallback(() => {
+    logout();
+    navigate("/login");
+    handleCloseMenu();
   }, [logout, navigate, handleCloseMenu]);
 
   const textColor = () => "#fff";
