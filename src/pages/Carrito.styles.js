@@ -17,25 +17,26 @@ const styles = {
     fontSize: 34,
   },
 
-  footerBox: (theme) => ({
-  position: { xs: "fixed", sm: "static" },
-  bottom: { xs: 20, sm: "auto" },
-  left: { xs: "50%", sm: "auto" },
-  transform: { xs: "translateX(-50%)", sm: "none" },
+  footerBox: () => ({
+    position: { xs: "fixed", sm: "static" },
+    bottom: { xs: 20, sm: "auto" },
+    left: { xs: "50%", sm: "auto" },
+    transform: { xs: "translateX(-50%)", sm: "none" },
 
-  width: { xs: "90%", sm: "100%" },
-  maxWidth: { xs: 420, sm: "none" },
+    width: { xs: "90%", sm: "100%" },
+    maxWidth: { xs: 420, sm: "none" },
 
-  backgroundColor: theme.palette.background.paper,
+    backgroundColor: "transparent",
+    boxShadow: "none",
 
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: 1.5,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 1.5,
 
-  zIndex: 1200,
-}),
+    zIndex: 1200,
+  }),
 
   divider: {
     display: "none",
@@ -44,12 +45,12 @@ const styles = {
   total: (theme) => ({
   display: "flex",
   alignItems: "center",
-  gap: 1.2,
+  gap: 1.2, 
 
   fontWeight: 700,
   fontSize: "0.9rem",
 
-  color: theme.palette.primary.contrastText,
+  color: "#fff",
 
   borderRadius: 20,
   px: 2.2,
@@ -109,7 +110,10 @@ emptyTitle: (theme) => ({
 }),
 
 emptySubtitle: (theme) => ({
-  color: theme.palette.text.secondary,
+  color:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.8)"
+      : "#666",
   mb: 2,
 }),
 
