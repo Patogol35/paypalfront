@@ -38,18 +38,9 @@ const styles = {
     zIndex: 1200,
   }),
 
-  divider: (theme) => ({
-  width: "100%",
-  height: "1px",
-  border: "none",
-  my: 1,
-
-  // 🔥 color fijo sin interpolación rara
-  backgroundColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255,255,255,0.12)"
-      : "rgba(0,0,0,0.12)",
-}),
+  divider: {
+    display: "none",
+  },
 
   total: (theme) => ({
   display: "flex",
