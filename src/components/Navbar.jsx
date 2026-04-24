@@ -40,45 +40,31 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false); // ✅ FIX
   const scrolled = useScrollTrigger(50);
 
-  // ✅ FIX: evita flicker al cerrar sesión
-  const menu = loggingOut
-    ? authMenu
-    : isAuthenticated
-    ? authMenu
-    : guestMenu;
+  const menu = isAuthenticated ? authMenu : guestMenu;
 
   const handleToggleMenu = useCallback(() => {
     setOpen((prev) => {
       const next = !prev;
-      if (next) {
-        window.dispatchEvent(new Event("menuOpen"));
-      }
+      if (next) window.dispatchEvent(new Event("menuOpen"));
       return next;
     });
   }, []);
 
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
-  // ✅ LOGOUT SIN FLICKER
   const handleLogout = useCallback(() => {
-    setLoggingOut(true); // 🚫 bloquea cambio visual
-
     setOpen(false);
-
     logout();
-
-    toast.success("Sesión cerrada correctamente 👋", {
-      position: "top-right",
-      autoClose: 2000,
-    });
-
     navigate("/login", { replace: true });
+
+    setTimeout(() => {
+      toast.success("Sesión cerrada correctamente 👋");
+    }, 100);
   }, [logout, navigate]);
 
-  const textColor = () => "#fff";
+  const textColor = "#fff";
 
   const UserSection = ({ showLogout = true, mobile = false }) =>
     isAuthenticated && (
@@ -88,9 +74,9 @@ export default function Navbar() {
         alignItems="center"
         sx={styles.userSection(mobile)}
       >
-        <AccountCircleIcon sx={{ color: textColor() }} />
+        <AccountCircleIcon sx={{ color: textColor }} />
 
-        <Typography sx={{ color: textColor(), fontWeight: 600 }}>
+        <Typography sx={{ color: textColor, fontWeight: 600 }}>
           {user?.username}
         </Typography>
 
@@ -107,8 +93,8 @@ export default function Navbar() {
     );
 
   const MenuList = ({ onClick }) =>
-    menu.map((item, idx) => (
-      <NavButton key={idx} item={item} onClick={onClick} />
+    menu.map((item) => (
+      <NavButton key={item.path} item={item} onClick={onClick} />
     ));
 
   return (
@@ -127,7 +113,7 @@ export default function Navbar() {
             variant="h6"
             component={Link}
             to="/"
-            sx={{ ...styles.logo, color: textColor() }}
+            sx={{ ...styles.logo, color: textColor }}
           >
             <ShoppingBagIcon sx={styles.logoIcon} />
             E-commerce Jorge Patricio
@@ -144,7 +130,7 @@ export default function Navbar() {
           </Box>
 
           <IconButton
-            sx={{ ...styles.menuBtnMobile, color: textColor() }}
+            sx={{ ...styles.menuBtnMobile, color: textColor }}
             onClick={handleToggleMenu}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -204,4 +190,4 @@ export default function Navbar() {
       </Drawer>
     </>
   );
-              }
+}
