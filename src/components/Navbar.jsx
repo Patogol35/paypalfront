@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useThemeMode } from "../context/ThemeContext";
@@ -42,40 +42,27 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const scrolled = useScrollTrigger(50);
 
-  const [menuSnapshot, setMenuSnapshot] = useState(
-    isAuthenticated ? authMenu : guestMenu
-  );
-
-  useEffect(() => {
-    if (!open) {
-      setMenuSnapshot(isAuthenticated ? authMenu : guestMenu);
-    }
-  }, [isAuthenticated, open]);
+  // ✅ Menú dinámico SIN snapshot (elimina flicker)
+  const menu = isAuthenticated ? authMenu : guestMenu;
 
   const handleToggleMenu = useCallback(() => {
     setOpen((prev) => {
       const next = !prev;
-
       if (next) {
         window.dispatchEvent(new Event("menuOpen"));
       }
-
       return next;
     });
   }, []);
 
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
-  // ✅ LOGOUT ARREGLADO
+  // ✅ LOGOUT LIMPIO (sin delay, sin parpadeo)
   const handleLogout = useCallback(() => {
-    handleCloseMenu();
-
-    // pequeño delay para que cierre bonito el drawer
-    setTimeout(() => {
-      logout();
-      navigate("/login");
-    }, 250);
-  }, [handleCloseMenu, logout, navigate]);
+    setOpen(false); // cierra drawer si está abierto
+    logout();
+    navigate("/login", { replace: true });
+  }, [logout, navigate]);
 
   const textColor = () => "#fff";
 
@@ -106,7 +93,7 @@ export default function Navbar() {
     );
 
   const MenuList = ({ onClick }) =>
-    menuSnapshot.map((item, idx) => (
+    menu.map((item, idx) => (
       <NavButton key={idx} item={item} onClick={onClick} />
     ));
 
@@ -203,4 +190,4 @@ export default function Navbar() {
       </Drawer>
     </>
   );
-          }
+}
