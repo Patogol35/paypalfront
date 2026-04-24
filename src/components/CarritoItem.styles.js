@@ -87,9 +87,21 @@ controlesWrapper: (theme) => ({
   p: 2,
   gap: 1.5,
 
-  borderLeft: { sm: `1px solid ${theme.palette.divider}` },
-  borderTop: { xs: `1px solid ${theme.palette.divider}`, sm: "none" },
-}),
+  borderLeft: {
+    sm:
+      theme.palette.mode === "dark"
+        ? "1px solid rgba(255,255,255,0.12)"
+        : "1px solid rgba(0,0,0,0.12)",
+  },
+
+  borderTop: {
+    xs:
+      theme.palette.mode === "dark"
+        ? "1px solid rgba(255,255,255,0.12)"
+        : "1px solid rgba(0,0,0,0.12)",
+    sm: "none",
+  },
+})
 
 cantidadWrapper: {
 display: "flex",
