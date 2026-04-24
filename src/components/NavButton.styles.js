@@ -33,27 +33,17 @@ const navButtonStyles = (theme, isActive, item, alwaysColoredPaths) => ({
 
   // 🔥 HOVER FIX REAL
   "&:hover": {
-    background: {
-      xs: item.color,
-      md: `linear-gradient(135deg, ${item.color} 0%, ${item.color}e6 100%)`,
-    },
-    boxShadow: isActive
-      ? "0 0 20px rgba(0,0,0,0.4)"
-      : "0 0 12px rgba(0,0,0,0.25)",
-
-    transform: "scale(1.02)", // 👈 pequeño, no rompe
+  background: {
+    xs: item.color,
+    md: item.color, // 👈 MISMO color, no cambia
   },
+  boxShadow: isActive
+    ? "0 0 20px rgba(0,0,0,0.4)"
+    : "0 0 12px rgba(0,0,0,0.25)",
 
-  // 🌙 DARK MODE
-  ...(theme.palette.mode === "dark" && {
-    color: "#fff",
-    "&:hover": {
-      background: {
-        xs: item.color,
-        md: `linear-gradient(135deg, ${item.color} 0%, ${item.color}dd 100%)`,
-      },
-    },
-  }),
+  transform: "scale(1.02)", // 👈 suave
+  transformOrigin: "center", // 👈 CLAVE (esto arregla el espacio abajo)
+},
 });
 
 export default navButtonStyles;
