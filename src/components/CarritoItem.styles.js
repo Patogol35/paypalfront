@@ -7,10 +7,7 @@ card: (theme) => ({
   borderRadius: 4,
 
   border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "#ffffff"
-      : "#000000",
+  borderColor: theme.palette.divider,
 
   overflow: "hidden",
   backgroundColor: theme.palette.background.paper,
@@ -21,6 +18,7 @@ card: (theme) => ({
       : "0 4px 12px rgba(0,0,0,0.12)",
 
   transition: "all 0.3s ease",
+
   "&:hover": {
     transform: "translateY(-2px)",
     boxShadow:
@@ -30,14 +28,17 @@ card: (theme) => ({
   },
 }),
 media: (theme) => ({
-width: { xs: "100%", sm: 180 },
-height: { xs: 200, sm: 180 },
-objectFit: "contain",
-borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
-bgcolor: theme.palette.mode === "dark" ? "#2c2c2c" : "#f9f9f9",
-p: 2,
-transition: "transform 0.35s ease",
-"&:hover": { transform: "scale(1.08)" },
+  width: { xs: "100%", sm: 180 },
+  height: { xs: 200, sm: 180 },
+  objectFit: "contain",
+  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+
+  bgcolor: theme.palette.action.hover,
+
+  p: 2,
+  transition: "transform 0.35s ease",
+
+  "&:hover": { transform: "scale(1.08)" },
 }),
 
 content: {
@@ -78,16 +79,17 @@ fontSize: "0.85rem",
 opacity: 0.8,
 },
 
-controlesWrapper: {
-display: "flex",
-flexDirection: { xs: "row", sm: "column" },
-justifyContent: "center",
-alignItems: "center",
-p: 2,
-gap: 1.5,
-borderLeft: { sm: "1px solid rgba(0,0,0,0.08)" },
-borderTop: { xs: "1px solid rgba(0,0,0,0.08)", sm: "none" },
-},
+controlesWrapper: (theme) => ({
+  display: "flex",
+  flexDirection: { xs: "row", sm: "column" },
+  justifyContent: "center",
+  alignItems: "center",
+  p: 2,
+  gap: 1.5,
+
+  borderLeft: { sm: `1px solid ${theme.palette.divider}` },
+  borderTop: { xs: `1px solid ${theme.palette.divider}`, sm: "none" },
+}),
 
 cantidadWrapper: {
 display: "flex",
