@@ -62,10 +62,10 @@ export default function Navbar() {
   const handleCloseMenu = useCallback(() => setOpen(false), []);
 
   const handleLogout = useCallback(() => {
-    logout();
-    navigate("/login");
-    handleCloseMenu();
-  }, [logout, navigate, handleCloseMenu]);
+  handleCloseMenu(); 
+  logout();
+  navigate("/login");
+}, [logout, navigate, handleCloseMenu]);
 
   const textColor = () => "#fff";
 
