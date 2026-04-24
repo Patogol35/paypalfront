@@ -11,29 +11,22 @@ const loginStyles = {
   }),
 
   paper: (theme) => ({
-    p: 4,
-    borderRadius: 3,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: 3,
+  p: 4,
+  borderRadius: 3,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
 
-    // ✅ usar sistema MUI
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.text.primary,
+  // 🔥 HACERLO INVISIBLE
+  backgroundColor: "transparent",
+  color: theme.palette.text.primary,
 
-    // ✅ borde correcto
-    border: "1px solid",
-    borderColor: theme.palette.divider,
+  border: "none",
+  boxShadow: "none",
 
-    // ✅ sombra adaptada
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 12px 24px rgba(0,0,0,0.6)"
-        : "0 12px 24px rgba(0,0,0,0.12)",
-
-    backdropFilter: "blur(6px)",
-  }),
+  backdropFilter: "none",
+}),
 
   titulo: (theme) => ({
     color: theme.palette.primary.main,
