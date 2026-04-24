@@ -41,8 +41,6 @@ export default function Navbar() {
 
   const [open, setOpen] = useState(false);
   const scrolled = useScrollTrigger(50);
-
-  // 🔥 SNAPSHOT DEL MENÚ (CLAVE PARA EVITAR FLICKER)
   const [menuSnapshot, setMenuSnapshot] = useState(
     isAuthenticated ? authMenu : guestMenu
   );
@@ -72,7 +70,7 @@ export default function Navbar() {
     setTimeout(() => {
       logout();
       navigate("/login");
-    }, 200); // 👈 espera a que cierre animación
+    }, 200); 
   }, [logout, navigate, handleCloseMenu]);
 
   const textColor = () => "#fff";
@@ -103,7 +101,6 @@ export default function Navbar() {
       </Stack>
     );
 
-  // 🔥 USA SNAPSHOT
   const MenuList = ({ onClick }) =>
     menuSnapshot.map((item, idx) => (
       <NavButton key={idx} item={item} onClick={onClick} />
