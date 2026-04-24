@@ -18,7 +18,6 @@ const styles = {
   },
   filtersContainer: (theme) => ({
   p: 3,
-    transition: "all 0.25s ease",
   borderRadius: 3,
   display: "flex",
   flexDirection: { xs: "column", sm: "row" },
@@ -27,19 +26,26 @@ const styles = {
   alignItems: "center",
   mb: 4,
 
-  // 🎨 MODO CLARO / OSCURO
+  transition: "all 0.25s ease",
+
+  // 🎨 Theme nativo (mejor rendimiento)
   bgcolor: theme.palette.background.paper,
 
   border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255,255,255,0.15)"
-      : "rgba(0,0,0,0.12)",
+  borderColor: theme.palette.divider,
 
   boxShadow:
     theme.palette.mode === "dark"
       ? "0 6px 18px rgba(0,0,0,0.5)"
       : "0 6px 16px rgba(0,0,0,0.1)",
+
+  // ✨ opcional (se siente más fluido)
+  "&:hover": {
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 8px 22px rgba(0,0,0,0.7)"
+        : "0 8px 20px rgba(0,0,0,0.15)",
+  },
 }),
   searchField: {
     minWidth: 250,
