@@ -35,20 +35,22 @@ borderColor:
 
   // 🖼 CONTENEDOR IMAGEN
   mediaWrapper: (theme) => ({
-    width: { xs: "100%", sm: 140 },
-    height: { xs: 180, sm: 120 }, // 🔥 controla altura real
+  width: { xs: "100%", sm: 140 },
 
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  // 🔥 FIX REAL
+  height: { xs: 180, sm: "auto" },
+  minHeight: { sm: 120 },
 
-    backgroundColor: theme.palette.action.hover,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-    borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+  backgroundColor: theme.palette.action.hover,
 
-    p: 1.5,
-  }),
+  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
+  p: 1.5,
+}),
   // 🖼 IMAGEN
   media: {
     width: "100%",
