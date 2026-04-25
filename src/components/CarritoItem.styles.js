@@ -5,7 +5,7 @@ const carritoItemStyles = {
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
 
-    // 🔥 clave para que el fondo cubra todo
+    // 🔥 importante para que el fondo cubra en horizontal
     alignItems: "stretch",
 
     mb: 3,
@@ -37,8 +37,8 @@ const carritoItemStyles = {
   mediaWrapper: (theme) => ({
     width: { xs: "100%", sm: 140 },
 
-    // 🔥 importante: no altura fija
-    height: "auto",
+    // 🔥 FIX CLAVE (no rompe vertical y arregla horizontal)
+    height: { xs: "auto", sm: 120 },
     minHeight: { xs: 180, sm: 120 },
 
     display: "flex",
@@ -49,7 +49,7 @@ const carritoItemStyles = {
 
     borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
-    overflow: "hidden",
+    p: 1.5,
   }),
 
   // 🖼 IMAGEN
@@ -57,8 +57,6 @@ const carritoItemStyles = {
     width: "100%",
     height: "100%",
     objectFit: "contain",
-
-    padding: "8px",
 
     transition: "transform 0.3s ease",
     "&:hover": {
