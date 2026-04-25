@@ -30,22 +30,23 @@ const carritoItemStyles = {
   }),
 
   media: (theme) => ({
-    width: { xs: "100%", sm: 180 },
-    height: { xs: 200, sm: 180 },
+  width: { xs: "100%", sm: 180 },
+  height: { xs: 200, sm: 180 },
 
-    objectFit: "contain", // 🔥 mantenemos esto (clave)
+  objectFit: "contain",
 
-    borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+  display: "block", // 🔥 ESTO ARREGLA EL ESPACIO ABAJO
 
-    bgcolor: theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5", // 🔥 más suave
-    p: 2,
+  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
-    transition: "transform 0.3s ease",
-    "&:hover": {
-      transform: "scale(1.06)", // 🔥 más fino
-    },
-  }),
+  bgcolor: theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5",
+  p: 2,
 
+  transition: "transform 0.3s ease",
+  "&:hover": {
+    transform: "scale(1.06)",
+  },
+}),
   content: {
     flex: 1,
     display: "flex",
