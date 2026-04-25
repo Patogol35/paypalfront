@@ -37,8 +37,8 @@ borderColor:
   mediaWrapper: (theme) => ({
   width: { xs: "100%", sm: 140 },
 
-  // 🔥 altura fija otra vez
-  height: { xs: 180, sm: 120 },
+  // 🔥 el contenedor SÍ crece
+  height: "auto",
 
   display: "flex",
   alignItems: "center",
@@ -52,15 +52,18 @@ borderColor:
 }),
   // 🖼 IMAGEN
   media: {
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
+  width: "100%",
 
-    transition: "transform 0.3s ease",
-    "&:hover": {
-      transform: "scale(1.05)",
-    },
+  // 🔥 aquí controlas el tamaño visual
+  maxHeight: { xs: 180, sm: 120 },
+
+  objectFit: "contain",
+
+  transition: "transform 0.3s ease",
+  "&:hover": {
+    transform: "scale(1.05)",
   },
+},
 
   // 📦 CONTENIDO
   content: (theme) => ({
