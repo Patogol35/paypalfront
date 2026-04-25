@@ -4,6 +4,7 @@ const carritoItemStyles = {
   card: (theme) => ({
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
+    alignItems: "stretch", // 🔥 importante para que todo tenga misma altura
     mb: 3,
     mx: { xs: 2, sm: 0 },
     borderRadius: 4,
@@ -29,32 +30,58 @@ const carritoItemStyles = {
     },
   }),
 
-  media: (theme) => ({
-  width: { xs: "100%", sm: 180 },
-  height: { xs: 200, sm: 180 },
+  // 🔥 CONTENEDOR DE IMAGEN (SOLUCIÓN REAL)
+  mediaWrapper: (theme) => ({
+    width: { xs: "100%", sm: 180 },
+    minHeight: { xs: 200, sm: 180 },
 
-  objectFit: "contain",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
 
-  display: "block", // 🔥 ESTO ARREGLA EL ESPACIO ABAJO
+    backgroundColor:
+      theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5",
 
-  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+    borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
-  bgcolor: theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5",
-  p: 2,
+    p: 2,
+    boxSizing: "border-box",
+  }),
 
-  transition: "transform 0.3s ease",
-  "&:hover": {
-    transform: "scale(1.06)",
+  // 🔥 IMAGEN LIMPIA
+  media: {
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",
+    display: "block",
+
+    transition: "transform 0.3s ease",
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
   },
-}),
-  content: {
+
+  content: (theme) => ({
     flex: 1,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     p: 2.5,
     gap: 1,
-  },
+
+    borderTop: {
+      xs: "1px solid",
+      sm: "none",
+    },
+    borderLeft: {
+      xs: "none",
+      sm: "1px solid",
+    },
+    borderColor:
+      theme.palette.mode === "dark"
+        ? alpha("#fff", 0.15)
+        : alpha("#000", 0.1),
+  }),
 
   controlesWrapper: (theme) => ({
     display: "flex",
@@ -97,6 +124,17 @@ const carritoItemStyles = {
     color: "text.secondary",
     fontSize: "0.88rem",
     mb: 1.2,
+  },
+
+  chipSubtotal: {
+    fontWeight: "bold",
+    fontSize: "0.95rem",
+  },
+
+  chipStock: {
+    fontWeight: "bold",
+    fontSize: "0.85rem",
+    opacity: 0.8,
   },
 
   cantidadWrapper: {
