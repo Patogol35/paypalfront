@@ -14,19 +14,36 @@ const loginStyles = {
 
   // 📦 CARD (PAPER)
   paper: (theme) => ({
-    p: 4,
-    borderRadius: 3,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: 3,
+  p: 4,
+  borderRadius: 3,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
 
-    // ✅ BORDE REAL (antes no se veía)
-    border: "1px solid",
-    borderColor:
-      theme.palette.mode === "dark"
-        ? "rgba(255,255,255,0.25)"
-        : "rgba(0,0,0,0.15)",
+  border: "1px solid",
+  borderColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.25)"
+      : "rgba(0,0,0,0.15)",
+
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 12px 24px rgba(0,0,0,0.6)"
+      : "0 12px 24px rgba(0,0,0,0.15)",
+
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "rgba(30,30,30,0.9)"
+      : "rgba(255,255,255,0.95)",
+
+  color: theme.palette.text.primary,
+
+  backdropFilter: "blur(10px)",
+
+  // 🔥 ESTO ES LA CLAVE
+  transition: "all 0.3s ease",
+}),
 
     // 🌫 SOMBRA
     boxShadow:
