@@ -203,44 +203,80 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           <TextField
-            name="username"
-            label="Usuario"
-            fullWidth
-            margin="normal"
-            value={form.username}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PersonOutline color="action" />
-                </InputAdornment>
-              ),
-            }}
-          />
+  name="username"
+  label="Usuario"
+  fullWidth
+  margin="normal"
+  value={form.username}
+  onChange={handleChange}
+  sx={{
+    input: {
+      color: theme.palette.text.primary,
+    },
+    label: {
+      color: theme.palette.text.secondary,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor:
+          theme.palette.mode === "dark" ? "#555" : "#ccc",
+      },
+      "&:hover fieldset": {
+        borderColor:
+          theme.palette.mode === "dark" ? "#90caf9" : "#1976d2",
+      },
+    },
+  }}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <PersonOutline color="action" />
+      </InputAdornment>
+    ),
+  }}
+/>
 
           <TextField
-            name="password"
-            label="Contraseña"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            margin="normal"
-            value={form.password}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockOutlined color="action" />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+  name="password"
+  label="Contraseña"
+  type={showPassword ? "text" : "password"}
+  fullWidth
+  margin="normal"
+  value={form.password}
+  onChange={handleChange}
+  sx={{
+    input: {
+      color: theme.palette.text.primary,
+    },
+    label: {
+      color: theme.palette.text.secondary,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor:
+          theme.palette.mode === "dark" ? "#555" : "#ccc",
+      },
+      "&:hover fieldset": {
+        borderColor:
+          theme.palette.mode === "dark" ? "#90caf9" : "#1976d2",
+      },
+    },
+  }}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <LockOutlined color="action" />
+      </InputAdornment>
+    ),
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton onClick={togglePasswordVisibility}>
+          {showPassword ? <Visibility /> : <VisibilityOff />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/>
 
           <Box mt={3} display="flex" flexDirection="column" gap={2}>
             <Button
