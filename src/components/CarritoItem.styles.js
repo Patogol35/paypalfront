@@ -34,31 +34,33 @@ const carritoItemStyles = {
 
   // 🖼 CONTENEDOR IMAGEN
   mediaWrapper: (theme) => ({
-    width: { xs: "100%", sm: 140 },
-    height: { xs: 180, sm: 120 }, // 🔥 controla altura real
+  width: { xs: "100%", sm: 140 },
+  height: { xs: 180, sm: 120 },
 
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-    backgroundColor: theme.palette.action.hover,
+  backgroundColor: theme.palette.action.hover,
 
-    borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
-    p: 1.5,
-  }),
+  overflow: "hidden", // 🔥 IMPORTANTE
+}),
 
   // 🖼 IMAGEN
   media: {
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
+  width: "100%",
+  height: "100%",
+  objectFit: "contain",
 
-    transition: "transform 0.3s ease",
-    "&:hover": {
-      transform: "scale(1.05)",
-    },
+  padding: "8px", 
+
+  transition: "transform 0.3s ease",
+  "&:hover": {
+    transform: "scale(1.05)",
   },
+},
 
   // 📦 CONTENIDO
   content: (theme) => ({
