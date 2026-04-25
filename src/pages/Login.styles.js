@@ -1,7 +1,15 @@
 const loginStyles = {
-  container: () => ({
+  container: (theme) => ({
   minHeight: "100vh",
-  background: "blue", // 👈 prueba
+  width: "100%", // 👈 clave
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+
+  background:
+    theme.palette.mode === "dark"
+      ? "#121212"
+      : "#f0f2f5", // gris suave tipo apps reales
 }),
 
   paper: (theme) => ({
