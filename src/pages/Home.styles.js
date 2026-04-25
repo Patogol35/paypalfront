@@ -31,7 +31,8 @@ const styles = {
   // 🎨 Theme nativo (mejor rendimiento)
   bgcolor: theme.palette.background.paper,
 
-  borderColor:
+  border: "1px solid",
+    borderColor:
   theme.palette.mode === "dark"
     ? "rgba(255,255,255,0.5)" // más blanco visible
     : "rgba(0,0,0,0.4)",      // más negro visible
