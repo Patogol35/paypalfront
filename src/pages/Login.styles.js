@@ -4,11 +4,10 @@ const loginStyles = {
   minHeight: "100vh",
   display: "flex",
   justifyContent: "center",
-  alignItems: "flex-start", // 👈 clave
+  alignItems: "center",
 
-  pt: 8, // 👈 sube el login desde arriba
-  pb: 2, // 👈 controla el espacio abajo
   px: 2,
+  py: 4, // 👈 pequeño margen arriba y abajo
 }),
 
   // 📦 CARD (PAPER)
