@@ -11,29 +11,32 @@ const loginStyles = {
   }),
 
   paper: (theme) => ({
-    p: 4,
-    borderRadius: 3,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: 3,
+  p: 4,
+  borderRadius: 3,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
 
-    // ✅ usar sistema MUI
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
 
-    // ✅ borde correcto
-    border: "1px solid",
-    borderColor: theme.palette.divider,
+  border: "1px solid",
+  borderColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.35)"
+      : "rgba(0,0,0,0.25)",
 
-    // ✅ sombra adaptada
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 12px 24px rgba(0,0,0,0.6)"
-        : "0 12px 24px rgba(0,0,0,0.12)",
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 12px 24px rgba(0,0,0,0.6)"
+      : "0 12px 24px rgba(0,0,0,0.12)",
 
-    backdropFilter: "blur(6px)",
-  }),
+  backdropFilter: "blur(6px)",
+
+  
+  transition: "background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease",
+}),
 
   titulo: (theme) => ({
     color: theme.palette.primary.main,
