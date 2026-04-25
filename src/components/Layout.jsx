@@ -31,8 +31,8 @@ export default function Layout() {
         transition: "background-color 0.3s ease",
       }}
     >
-      {/* 🔥 Navbar solo si NO es login/register */}
-      {!isAuthPage && <Navbar />}
+      {/* ✅ Navbar SIEMPRE visible */}
+      <Navbar />
 
       {/* CONTENIDO */}
       <Container
@@ -40,9 +40,9 @@ export default function Layout() {
         sx={{
           flex: 1,
 
-          // 🔥 quitar espacios en login
+          // 🔥 Ajuste inteligente de espacio
           pt: isAuthPage
-            ? 0
+            ? `${theme.mixins.toolbar.minHeight}px` // solo compensa navbar
             : `calc(${theme.mixins.toolbar.minHeight}px + 24px)`,
 
           pb: isAuthPage ? 0 : 4,
@@ -51,7 +51,7 @@ export default function Layout() {
         <Outlet />
       </Container>
 
-      {/* 🛒 BOTÓN solo si NO es login */}
+      {/* 🛒 BOTÓN (oculto en login) */}
       {!isAuthPage && (
         <IconButton
           onClick={() => navigate("/carrito")}
@@ -82,7 +82,7 @@ export default function Layout() {
         </IconButton>
       )}
 
-      {/* FOOTER solo si NO es login */}
+      {/* FOOTER (oculto en login) */}
       {!isAuthPage && (
         <Box
           component="footer"
