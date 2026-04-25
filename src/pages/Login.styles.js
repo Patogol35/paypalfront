@@ -11,29 +11,31 @@ const loginStyles = {
   }),
 
   paper: (theme) => ({
-    p: 4,
-    borderRadius: 3,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: 3,
+  p: 4,
+  borderRadius: 4,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: 3,
 
-    // ✅ usar sistema MUI
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.text.primary,
+  // 🔥 MÁS CONTRASTE
+  backgroundColor:
+    theme.palette.mode === "dark" ? "#1e1e1e" : "#ffffff",
 
-    // ✅ borde correcto
-    border: "1px solid",
-    borderColor: theme.palette.divider,
+  // 🔥 BORDE MÁS VISIBLE
+  border: "1px solid",
+  borderColor:
+    theme.palette.mode === "dark" ? "#333" : "#ddd",
 
-    // ✅ sombra adaptada
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 12px 24px rgba(0,0,0,0.6)"
-        : "0 12px 24px rgba(0,0,0,0.12)",
+  // 🔥 SOMBRA MÁS FUERTE
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 20px 50px rgba(0,0,0,0.8)"
+      : "0 20px 50px rgba(0,0,0,0.25)",
 
-    backdropFilter: "blur(6px)",
-  }),
+  // 🔥 EFECTO ELEVADO
+  transform: "translateY(0)",
+}),
 
   titulo: (theme) => ({
     color: theme.palette.primary.main,
