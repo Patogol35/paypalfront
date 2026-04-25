@@ -34,10 +34,9 @@ const loginStyles = {
 
   backdropFilter: "blur(6px)",
 
-  
-  transition: "background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease",
+  // 🔥 evita el efecto "cuadrado"
+  willChange: "background-color, transform",
 }),
-
   titulo: (theme) => ({
     color: theme.palette.primary.main,
   }),
