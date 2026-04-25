@@ -1,10 +1,10 @@
-  import { alpha } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 
 const carritoItemStyles = {
   card: (theme) => ({
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
-    alignItems: "stretch", // 🔥 importante para que todo tenga misma altura
+    alignItems: "stretch", 
     mb: 3,
     mx: { xs: 2, sm: 0 },
     borderRadius: 4,
@@ -30,10 +30,10 @@ borderColor:
     },
   }),
 
-  // 🔥 CONTENEDOR DE IMAGEN (SOLUCIÓN REAL)
+  // CONTENEDOR 
   mediaWrapper: (theme) => ({
   width: { xs: "100%", sm: 180 },
-  minHeight: { xs: 180, sm: 180 },
+  minHeight: { xs: 180, sm: 140 },
 
   display: "flex",
   alignItems: "center",
