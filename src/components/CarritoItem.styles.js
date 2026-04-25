@@ -41,12 +41,12 @@ media: (theme) => ({
   p: 2,
 
   borderBottom: {
-    xs: "2px solid",
+    xs: "1px solid",
     sm: "none",
   },
   borderRight: {
     xs: "none",
-    sm: "2px solid",
+    sm: "1px solid",
   },
 
   // 🔥 mejor usarlo así (más claro y consistente)
