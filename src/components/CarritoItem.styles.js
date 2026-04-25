@@ -69,10 +69,7 @@ borderColor:
     p: 2.5,
     gap: 1,
 
-    borderTop: {
-      xs: "1px solid",
-      sm: "none",
-    },
+    
     borderLeft: {
       xs: "none",
       sm: "1px solid",
