@@ -6,7 +6,7 @@ const carritoItemStyles = {
     flexDirection: { xs: "column", sm: "row" },
 
     // 🔥 clave: evita que todo se estire en horizontal
-    alignItems: { xs: "stretch", sm: "center" },
+    alignItems: "stretch",
 
     mb: 3,
     mx: { xs: 2, sm: 0 },
@@ -63,22 +63,33 @@ borderColor:
 
   // 📦 CONTENIDO
   content: (theme) => ({
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 
-    p: { xs: 2.5, sm: 1.5 }, // 🔥 más compacto en horizontal
-    gap: { xs: 1, sm: 0.5 },
+  p: { xs: 2.5, sm: 1.5 },
+  gap: { xs: 1, sm: 0.5 },
 
-    borderLeft: {
-      sm: `1px solid ${
-        theme.palette.mode === "dark"
-          ? alpha("#fff", 0.08)
-          : alpha("#000", 0.05)
-      }`,
-    },
-  }),
+  // 🔥 borde superior (móvil)
+  borderTop: {
+    xs: `1px solid ${
+      theme.palette.mode === "dark"
+        ? alpha("#fff", 0.45)
+        : alpha("#000", 0.45)
+    }`,
+    sm: "none",
+  },
+
+  // 🔥 borde lateral (horizontal)
+  borderLeft: {
+    sm: `1px solid ${
+      theme.palette.mode === "dark"
+        ? alpha("#fff", 0.45)
+        : alpha("#000", 0.45)
+    }`,
+  },
+}),
 
   // 🎛 CONTROLES
   controlesWrapper: (theme) => ({
@@ -94,16 +105,16 @@ borderColor:
     borderLeft: {
       sm: `1px solid ${
         theme.palette.mode === "dark"
-          ? alpha("#fff", 0.08)
-          : alpha("#000", 0.05)
+            ? alpha("#fff", 0.45)
+      : alpha("#000", 0.45)
       }`,
     },
 
     borderTop: {
       xs: `1px solid ${
         theme.palette.mode === "dark"
-          ? alpha("#fff", 0.1)
-          : alpha("#000", 0.08)
+            ? alpha("#fff", 0.45)
+      : alpha("#000", 0.45)
       }`,
       sm: "none",
     },
