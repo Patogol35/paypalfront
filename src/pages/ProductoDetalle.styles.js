@@ -13,17 +13,21 @@ export const containerSx = {
   gap: 4,
 };
 
-export const dividerSx = (theme) => ({
-  width: "100%",
-  my: 2,
-  height: "1px",
-  border: "none",
-
-  background:
+export const dividerSx = (theme) => {
+  const borderColor =
     theme.palette.mode === "dark"
-      ? "linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)"
-      : "linear-gradient(to right, transparent, rgba(0,0,0,0.2), transparent)",
-});
+      ? "rgba(255,255,255,0.35)"
+      : "rgba(0,0,0,0.25)";
+
+  return {
+    width: "100%",
+    my: 2,
+    height: "1px",
+    border: "none",
+
+    backgroundColor: borderColor,
+  };
+};
 
 // ================================
 // BOTÓN VOLVER
