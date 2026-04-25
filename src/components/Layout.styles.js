@@ -8,10 +8,13 @@ export const layoutStyles = (theme) => ({
   },
 
   container: {
-    flex: 1,
-    pt: `calc(${theme.mixins.toolbar.minHeight}px + 24px)`,
-    pb: 4,
+  flex: 1,
+  paddingTop: {
+    xs: `calc(56px + 24px)`,
+    sm: `calc(64px + 24px)`,
   },
+  paddingBottom: 32,
+},
 
   floatingButton: {
     position: "fixed",
