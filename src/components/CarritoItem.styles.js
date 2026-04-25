@@ -11,8 +11,8 @@ const carritoItemStyles = {
     border: "1px solid",
     borderColor:
       theme.palette.mode === "dark"
-        ? alpha("#fff", 0.3)
-        : alpha("#000", 0.2),
+        ? alpha("#fff", 0.25)
+        : alpha("#000", 0.15),
 
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
@@ -22,55 +22,38 @@ const carritoItemStyles = {
         ? "0 4px 14px rgba(0,0,0,0.6)"
         : "0 4px 12px rgba(0,0,0,0.12)",
 
-    transition: "all 0.3s ease",
+    transition: "all 0.25s ease",
 
     "&:hover": {
       transform: "translateY(-2px)",
-      boxShadow:
-        theme.palette.mode === "dark"
-          ? "0 8px 24px rgba(0,0,0,0.8)"
-          : "0 8px 24px rgba(0,0,0,0.2)",
     },
   }),
 
   media: (theme) => ({
-  width: { xs: "100%", sm: 180 },
-  height: { xs: 200, sm: 180 }, // 🔥 estable, no rompe
+    width: { xs: "100%", sm: 180 },
+    height: { xs: 200, sm: 180 },
 
-  objectFit: "cover",
+    objectFit: "contain", // 🔥 mantenemos esto (clave)
 
-  borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
+    borderRadius: { xs: "16px 16px 0 0", sm: "16px 0 0 16px" },
 
-  p: 0,
-  bgcolor: "transparent",
+    bgcolor: theme.palette.mode === "dark" ? "#2c2c2c" : "#f5f5f5", // 🔥 más suave
+    p: 2,
 
-  transition: "transform 0.3s ease",
-  "&:hover": {
-    transform: "scale(1.03)",
-  },
-}),
+    transition: "transform 0.3s ease",
+    "&:hover": {
+      transform: "scale(1.06)", // 🔥 más fino
+    },
+  }),
 
-  content: (theme) => ({
+  content: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     p: 2.5,
     gap: 1,
-
-    borderTop: {
-      xs: "1px solid",
-      sm: "none",
-    },
-    borderLeft: {
-      xs: "none",
-      sm: "1px solid",
-    },
-    borderColor:
-      theme.palette.mode === "dark"
-        ? alpha("#fff", 0.2)
-        : alpha("#000", 0.15),
-  }),
+  },
 
   controlesWrapper: (theme) => ({
     display: "flex",
@@ -80,19 +63,18 @@ const carritoItemStyles = {
     p: 2,
     gap: 1.5,
 
-    // 🔥 simple y limpio (mejor que ::before)
     borderLeft: {
       sm: `1px solid ${
         theme.palette.mode === "dark"
-          ? alpha("#fff", 0.2)
-          : alpha("#000", 0.15)
+          ? alpha("#fff", 0.15)
+          : alpha("#000", 0.1)
       }`,
     },
     borderTop: {
       xs: `1px solid ${
         theme.palette.mode === "dark"
-          ? alpha("#fff", 0.2)
-          : alpha("#000", 0.15)
+          ? alpha("#fff", 0.15)
+          : alpha("#000", 0.1)
       }`,
       sm: "none",
     },
@@ -100,7 +82,7 @@ const carritoItemStyles = {
 
   titulo: {
     fontWeight: 600,
-    fontSize: "1.1rem",
+    fontSize: "1.05rem",
     lineHeight: 1.4,
     mb: 0.5,
   },
@@ -112,8 +94,8 @@ const carritoItemStyles = {
     overflow: "hidden",
     textOverflow: "ellipsis",
     color: "text.secondary",
-    fontSize: "0.9rem",
-    mb: 1.5,
+    fontSize: "0.88rem",
+    mb: 1.2,
   },
 
   cantidadWrapper: {
@@ -133,7 +115,6 @@ const carritoItemStyles = {
     bgcolor: "background.paper",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     "&:hover": {
-      bgcolor: "action.hover",
       transform: "scale(1.1)",
     },
     transition: "all 0.2s ease",
@@ -145,7 +126,6 @@ const carritoItemStyles = {
       textAlign: "center",
       fontWeight: "bold",
       fontSize: "1rem",
-      borderRadius: 2,
     },
   },
 
