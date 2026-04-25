@@ -1,3 +1,4 @@
+import { alpha } from "@mui/material/styles";
 // ================================
 // CONTENEDOR PRINCIPAL
 // ================================
@@ -16,8 +17,8 @@ export const containerSx = {
 export const dividerSx = (theme) => {
   const borderColor =
     theme.palette.mode === "dark"
-      ? "rgba(255,255,255,0.35)"
-      : "rgba(0,0,0,0.25)";
+      ? alpha("#fff", 0.45)
+      : alpha("#000", 0.45);
 
   return {
     width: "100%",
@@ -41,10 +42,10 @@ export const botonVolverSx = (theme) => ({
   py: 0.6,
 
   border: "1px solid",
-  borderColor:
+borderColor:
   theme.palette.mode === "dark"
-    ? "rgba(255,255,255,0.5)" // más blanco visible
-    : "rgba(0,0,0,0.4)",      // más negro visible
+    ? alpha("#fff", 0.45)
+    : alpha("#000", 0.45),
 
   color: theme.palette.text.primary,
   backdropFilter: "blur(6px)",
@@ -130,11 +131,11 @@ export const imagenContainerSx = (theme) => ({
   maxHeight: 320,
   maxWidth: 240,
 
-  border: "1px solid",
-  borderColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255,255,255,0.35)"
-      : "rgba(0,0,0,0.3)",
+border: "1px solid",
+borderColor:
+  theme.palette.mode === "dark"
+    ? alpha("#fff", 0.45)
+    : alpha("#000", 0.45),
 
   boxShadow:
     theme.palette.mode === "dark"
@@ -250,10 +251,10 @@ export const varianteBtnSx = (isSelected, stock, theme) => ({
   py: 0.7,
 
   border: "1px solid",
-  borderColor:
+borderColor:
   theme.palette.mode === "dark"
-    ? "rgba(255,255,255,0.5)" 
-    : "rgba(0,0,0,0.4)",      
+    ? alpha("#fff", 0.45)
+    : alpha("#000", 0.45),      
 
   backgroundColor: isSelected
     ? theme.palette.primary.main
