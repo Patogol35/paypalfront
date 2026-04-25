@@ -68,12 +68,6 @@ borderColor:
     justifyContent: "space-between",
     p: 2.5,
     gap: 1,
-
-    
-    borderLeft: {
-      xs: "none",
-      sm: "1px solid",
-    },
     borderColor:
       theme.palette.mode === "dark"
         ? alpha("#fff", 0.15)
