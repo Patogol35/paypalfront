@@ -2,6 +2,9 @@ import { Box, Container, IconButton, Badge } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCarrito } from "../context/CarritoContext";
 import { layoutStyles } from "./Layout.styles"; // 👈 SOLO para footer
@@ -75,7 +78,45 @@ export default function Layout() {
 
       {/* FOOTER (EXTERNALIZADO) */}
       <Box component="footer" sx={styles.footer}>
-  © 2026 · Ecommerce desarrollado por Jorge Patricio Santamaría Cherrez · Todos los derechos reservados
+  {/* Línea principal */}
+  <Box>
+    Portafolio desarrollado por Jorge Patricio Santamaría Cherrez
+  </Box>
+
+  {/* Copyright */}
+  <Box>
+    © 2026 — Todos los derechos reservados
+  </Box>
+
+  {/* Redes */}
+  <Box sx={styles.socialIcons}>
+    <IconButton
+      component="a"
+      href="https://www.facebook.com/share/1C9RgHAPvL/"
+      target="_blank"
+      rel="noopener"
+    >
+      <FacebookIcon />
+    </IconButton>
+
+    <IconButton
+      component="a"
+      href="https://www.instagram.com/jorge_patricio_26"
+      target="_blank"
+      rel="noopener"
+    >
+      <InstagramIcon />
+    </IconButton>
+
+    <IconButton
+      component="a"
+      href="https://www.linkedin.com/in/jorge-patricio-santamaría-cherrez-2a73792b2"
+      target="_blank"
+      rel="noopener"
+    >
+      <LinkedInIcon />
+    </IconButton>
+  </Box>
 </Box>
     </Box>
   );
