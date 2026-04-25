@@ -39,8 +39,8 @@ export const botonVolverSx = (theme) => ({
   border: "1px solid",
   borderColor:
   theme.palette.mode === "dark"
-    ? "rgba(255,255,255,0.25)" // blanco suave
-    : "rgba(0,0,0,0.2)",       // negro suave
+    ? "rgba(255,255,255,0.5)" // más blanco visible
+    : "rgba(0,0,0,0.4)",      // más negro visible
 
   color: theme.palette.text.primary,
   backdropFilter: "blur(6px)",
