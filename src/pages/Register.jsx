@@ -173,6 +173,7 @@ export default function Register() {
     }
   };
 
+  // 🔥 INPUT reutilizable con estilos correctos
   const renderInput = useCallback(
     (label, name, icon, type = "text", auto = "") => (
       <TextField
@@ -185,16 +186,20 @@ export default function Register() {
         onChange={handleChange}
         required
         autoComplete={auto}
+        sx={registerStyles.input(theme)}
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start">{icon}</InputAdornment>
+            <InputAdornment position="start">
+              {icon}
+            </InputAdornment>
           ),
         }}
       />
     ),
-    [form, handleChange]
+    [form, handleChange, theme]
   );
 
+  // 🔄 SPINNER GLOBAL
   if (authenticating) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -216,17 +221,20 @@ export default function Register() {
           Crear cuenta
         </Typography>
 
-        <Typography
-  align="center"
-  sx={registerStyles.subtitulo(theme)}
->
+        <Typography align="center" sx={registerStyles.subtitulo(theme)}>
           Completa tus datos para registrarte
         </Typography>
 
         <form onSubmit={handleSubmit} noValidate>
           {renderInput("Usuario", "username", <PersonOutline color="action" />)}
 
-          {renderInput("Correo", "email", <EmailOutlined color="action" />, "email", "email")}
+          {renderInput(
+            "Correo",
+            "email",
+            <EmailOutlined color="action" />,
+            "email",
+            "email"
+          )}
 
           {renderInput(
             "Contraseña",
@@ -270,10 +278,9 @@ export default function Register() {
               />
             }
             label="Mostrar contraseñas"
-            sx={registerStyles.checkbox}
+            sx={registerStyles.checkbox(theme)}
           />
 
-          {/*  BOTONES */}
           <Box sx={registerStyles.acciones}>
             <Button
               type="submit"
@@ -315,4 +322,4 @@ export default function Register() {
       </Paper>
     </Container>
   );
-        }
+}
