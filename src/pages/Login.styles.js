@@ -6,19 +6,8 @@ const loginStyles = {
   alignItems: "center",
 
   px: 2,
-  py: 4, // 🔥 vuelve el espacio arriba/abajo
 
-  background:
-    theme.palette.mode === "dark"
-      ? "rgba(255,255,255,0.03)"
-      : "rgba(0,0,0,0.03)",
-
-  borderRadius: 3,
-
-  boxShadow:
-    theme.palette.mode === "dark"
-      ? "0 8px 30px rgba(0,0,0,0.6)"
-      : "0 8px 25px rgba(0,0,0,0.08)",
+  transform: "translateY(-20px)", // 🔥 lo sube ligeramente
 }),
 
   paper: (theme) => ({
