@@ -178,7 +178,7 @@ export default function Pedidos() {
                           sx={{
                             width: 60,
                             height: 60,
-                            objectFit: "cover",
+                            objectFit: "contain",
                             borderRadius: 2,
                           }}
                         />
