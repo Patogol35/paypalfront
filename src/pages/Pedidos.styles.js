@@ -1,3 +1,4 @@
+import { alpha } from "@mui/material/styles";
 const pedidosStyles = {
   container: {
     mt: 4,
@@ -17,13 +18,18 @@ const pedidosStyles = {
     fontSize: 36,
   },
 
-  card: {
-    mb: 3,
-    borderRadius: 3,
-    boxShadow: 3,
-    transition: "all 0.3s",
-    "&:hover": { boxShadow: 6, transform: "scale(1.01)" },
-  },
+  card: (theme) => ({
+  mb: 3,
+  borderRadius: 3,
+  boxShadow: 3,
+  border: `1px solid ${
+    theme.palette.mode === "dark"
+        ? alpha("#fff", 0.45)
+        : alpha("#000", 0.45)
+  }`,
+  transition: "all 0.3s",
+  "&:hover": { boxShadow: 6, transform: "scale(1.01)" },
+}),
 
   header: {
     mb: 1,
