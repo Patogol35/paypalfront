@@ -17,26 +17,39 @@ const styles = {
     fontSize: 34,
   },
 
-  footerBox: () => ({
-    position: { xs: "fixed", sm: "static" },
-    bottom: { xs: 20, sm: "auto" },
-    left: { xs: "50%", sm: "auto" },
-    transform: { xs: "translateX(-50%)", sm: "none" },
+  footerBox: (theme) => ({
+  position: "static", 
 
-    width: { xs: "90%", sm: "100%" },
-    maxWidth: { xs: 420, sm: "none" },
+  width: "100%",
+  maxWidth: 500,
+  margin: "24px auto 0", 
 
-    backgroundColor: "transparent",
-    boxShadow: "none",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 1.5,
 
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 1.5,
+  // 🔥 estilo tipo card (mantiene diseño elegante)
+  padding: "16px 12px",
+  borderRadius: 16,
 
-    zIndex: 1200,
-  }),
+  background:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.05)"
+      : "#fff",
+
+  border: "1px solid",
+  borderColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.15)"
+      : "rgba(0,0,0,0.08)",
+
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 6px 20px rgba(0,0,0,0.6)"
+      : "0 6px 20px rgba(0,0,0,0.1)",
+}),
 
   divider: {
     display: "none",
