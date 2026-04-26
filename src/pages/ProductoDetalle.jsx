@@ -42,8 +42,7 @@ import {
 
 export default function ProductoDetalle() {
   const location = useLocation();
-const producto = location.state?.producto;
-  const producto = state?.producto;
+  const producto = location.state?.producto;
 
   const { agregarAlCarrito } = useCarrito();
   const { isAuthenticated } = useAuth();
@@ -53,7 +52,6 @@ const producto = location.state?.producto;
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
-
 
   useEffect(() => {
     const handleMenuOpen = () => {
