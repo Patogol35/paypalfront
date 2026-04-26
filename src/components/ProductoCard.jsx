@@ -131,8 +131,11 @@ export default function ProductoCard({ producto, onAgregar }) {
         )}
       </Box>
 
-      {/* MINIATURAS */}
-      {imagenes.length > 1 && (
+{/* 🔥 DIVIDER DESPUÉS DE IMAGEN */}
+<Divider sx={dividerSx} />
+
+{/* MINIATURAS */}
+{imagenes.length > 1 && (
         <Stack
           direction="row"
           spacing={1}
