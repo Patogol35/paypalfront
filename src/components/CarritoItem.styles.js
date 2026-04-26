@@ -188,17 +188,31 @@ const carritoItemStyles = {
     py: 0.4,
   },
 
-  botonCantidad: {
-    minWidth: 30,
-    minHeight: 30,
-    borderRadius: "50%",
-    bgcolor: "background.paper",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    "&:hover": {
-      transform: "scale(1.1)",
-    },
-    transition: "all 0.2s ease",
+  botonCantidad: (theme) => ({
+  minWidth: 30,
+  minHeight: 30,
+  borderRadius: "50%",
+
+  bgcolor: "background.paper",
+
+  border: "1px solid",
+  borderColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.25)"
+      : "rgba(0,0,0,0.2)",
+
+  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+
+  transition: "all 0.2s ease",
+
+  "&:hover": {
+    transform: "scale(1.1)",
+    borderColor:
+      theme.palette.mode === "dark"
+        ? "rgba(255,255,255,0.5)"
+        : "rgba(0,0,0,0.4)",
   },
+}),
 
   cantidadInput: {
     width: 45,
