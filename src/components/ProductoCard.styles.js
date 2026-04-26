@@ -123,18 +123,38 @@ export const precioStackSx = (theme) => ({
 // DIVIDER
 // ================================
 export const dividerSx = (theme) => {
-  const borderColor =
+  const baseColor =
     theme.palette.mode === "dark"
       ? alpha("#fff", 0.25)
       : alpha("#000", 0.25);
 
   return {
-    my: 1.8,
+    my: 2,
     mx: -2.2,
     height: "1px",
     border: "none",
+    position: "relative",
 
-    backgroundColor: borderColor,
+    background: `linear-gradient(
+      to right,
+      transparent,
+      ${baseColor},
+      transparent
+    )`,
+
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top: 0,
+      height: "1px",
+      opacity: 0.4,
+      background:
+        theme.palette.mode === "dark"
+          ? "rgba(255,255,255,0.1)"
+          : "rgba(0,0,0,0.05)",
+    },
   };
 };
 
