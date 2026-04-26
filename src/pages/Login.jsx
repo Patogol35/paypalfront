@@ -280,19 +280,18 @@ export default function Login() {
 
           <Box mt={3} display="flex" flexDirection="column" gap={2}>
             <Button
-  variant="contained"
-  fullWidth
-  startIcon={<ShoppingCartCheckoutIcon />}
-  sx={botonAgregarSx(stockTotal)}
-  onClick={() =>
-    navigate(`/producto/${producto.id}`, {
-      state: { producto },
-    })
-  }
-  disabled={stockTotal === 0}
->
-  {stockTotal > 0 ? "Ver opciones" : "Agotado"}
-</Button>
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={loading || authenticating}
+              sx={loginStyles.botonLogin(theme)}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Iniciar sesión"
+              )}
+            </Button>
 
             <Button
               variant="outlined"
@@ -320,4 +319,4 @@ export default function Login() {
       </Paper>
     </Container>
   );
-  }
+          }
