@@ -208,4 +208,53 @@ export const botonDetallesSx = (theme) => ({
     backgroundColor: theme.palette.action.hover,
     transform: "scale(1.03)",
   },
+
+  // ================================
+// MINIATURAS CONTENEDOR
+// ================================
+export const miniaturasStackSx = {
+  px: 1,
+  mt: 1,
+  justifyContent: "center",
+};
+
+
+// ================================
+// MINIATURA IMAGEN
+// ================================
+export const miniaturaImgSx = (theme, activa) => ({
+  width: 45,
+  height: 45,
+  objectFit: "cover",
+  borderRadius: 1,
+  cursor: "pointer",
+
+  border: "2px solid",
+  borderColor: activa
+    ? theme.palette.primary.main
+    : theme.palette.mode === "dark"
+    ? "rgba(255,255,255,0.2)"
+    : "rgba(0,0,0,0.2)",
+
+  transition: "all 0.25s ease",
+
+  "&:hover": {
+    transform: "scale(1.08)",
+    borderColor: activa
+      ? theme.palette.primary.main
+      : theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.4)"
+      : "rgba(0,0,0,0.4)",
+  },
+});
+
+
+// ================================
+// DIVIDER SUPERIOR (DESPUÉS IMAGEN)
+// ================================
+export const dividerTopSx = (theme) => ({
+  ...dividerSx(theme),
+  mt: 0,
+  mb: 1,
+});
 });
