@@ -5,7 +5,6 @@ const carritoItemStyles = {
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
 
-    // 🔥 clave: evita que todo se estire en horizontal
     alignItems: "stretch",
 
     mb: 3,
@@ -33,7 +32,7 @@ borderColor:
     },
   }),
 
-  // 🖼 CONTENEDOR IMAGEN
+  //  CONTENEDOR IMAGEN
   mediaWrapper: (theme) => ({
   width: { xs: "100%", sm: 140 },
 
@@ -84,7 +83,7 @@ borderColor:
     sm: "none",
   },
 
-  // 🔥 borde lateral (horizontal)
+  // borde lateral (horizontal)
   borderLeft: {
     sm: `1px solid ${
       theme.palette.mode === "dark"
@@ -94,7 +93,7 @@ borderColor:
   },
 }),
 
-  // 🎛 CONTROLES
+  // CONTROLES
   controlesWrapper: (theme) => ({
     display: "flex",
     flexDirection: { xs: "row", sm: "column" },
@@ -108,8 +107,8 @@ borderColor:
     borderLeft: {
       sm: `1px solid ${
         theme.palette.mode === "dark"
-            ? alpha("#fff", 0.45)
-      : alpha("#000", 0.45)
+            ? alpha("#fff", 0.25)
+      : alpha("#000", 0.25)
       }`,
     },
 
