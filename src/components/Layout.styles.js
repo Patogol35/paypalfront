@@ -16,8 +16,8 @@ export const layoutStyles = (theme) => ({
     // fondo dinámico
     background:
       theme.palette.mode === "dark"
-        ? `linear-gradient(135deg, #121212, #1e1e1e)` // 🌑 negro elevado (no puro)
-        : "linear-gradient(135deg, #0A66C2, #1976d2, #42a5f5)",
+        ? `linear-gradient(135deg, #121212, #1e1e1e)` 
+        : "linear-gradient(135deg, #4facfe, #6ec6ff, #b3e5fc)",
 
     
     borderTop: `1px solid ${
