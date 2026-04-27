@@ -52,6 +52,9 @@ export default function Login() {
       navigate("/", { replace: true });
     }
   }, [isAuthenticated, authLoading, navigate]);
+  useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
 
   // =====================
   // HANDLERS
