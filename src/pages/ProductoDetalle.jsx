@@ -22,6 +22,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   containerSx,
   botonVolverSx,
+  imagenContainerSx,
   dividerSx,
   tituloSx,
   precioSx,
@@ -51,14 +52,19 @@ export default function ProductoDetalle() {
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  // 🔥 animación
+  // 🔥 NUEVO: animación elegante
   const [fade, setFade] = useState(true);
-  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
-    const handleMenuOpen = () => setZoomOpen(false);
+    const handleMenuOpen = () => {
+      setZoomOpen(false);
+    };
+
     window.addEventListener("menuOpen", handleMenuOpen);
-    return () => window.removeEventListener("menuOpen", handleMenuOpen);
+
+    return () => {
+      window.removeEventListener("menuOpen", handleMenuOpen);
+    };
   }, []);
 
   useEffect(() => {
@@ -88,6 +94,18 @@ export default function ProductoDetalle() {
       .filter(Boolean);
   }, [producto, varianteSeleccionada]);
 
+  const mostrarMiniaturas = useMemo(() => {
+    if (varianteSeleccionada) {
+      return varianteSeleccionada.imagenes?.length > 1;
+    }
+
+    const totalProductoImgs = [producto.imagen, ...(producto.imagenes || [])]
+      .map(getImagen)
+      .filter(Boolean).length;
+
+    return totalProductoImgs > 1;
+  }, [producto, varianteSeleccionada]);
+
   const [imagenMostrada, setImagenMostrada] = useState(
     imagenes[0] || ""
   );
@@ -98,11 +116,9 @@ export default function ProductoDetalle() {
     }
   }, [imagenes]);
 
-  const cambiarImagen = (imgUrl, index) => {
+  // 🔥 CAMBIO CON ANIMACIÓN
+  const cambiarImagen = (imgUrl) => {
     if (imgUrl === imagenMostrada) return;
-
-    const currentIndex = imagenes.indexOf(imagenMostrada);
-    setDirection(index > currentIndex ? 1 : -1);
 
     setFade(false);
 
@@ -137,28 +153,11 @@ export default function ProductoDetalle() {
         varianteSeleccionada?.id || null,
         1
       );
+
       toast.success(`${producto.nombre} agregado al carrito 🛒`);
     } catch (e) {
       toast.error(e.message);
     }
-  };
-
-  // 🔥 FULL WIDTH HERO
-  const imagenContainerFullSx = {
-    width: "100vw",
-    maxWidth: "100vw",
-    position: "relative",
-    left: "50%",
-    transform: "translateX(-50%)",
-    height: { xs: "320px", sm: "420px", md: "520px" },
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
-    background:
-      theme.palette.mode === "dark"
-        ? "linear-gradient(145deg, #0f172a, #020617)"
-        : "linear-gradient(145deg, #f8fafc, #e2e8f0)",
   };
 
   return (
@@ -172,50 +171,57 @@ export default function ProductoDetalle() {
         Regresar
       </Button>
 
-      {/* 🔥 IMAGEN FULL WIDTH */}
-      <Box
-        sx={imagenContainerFullSx}
-        onClick={() => {
-          setZoomImage(imagenMostrada);
-          setZoomOpen(true);
-        }}
-      >
-        <Box
-          component="img"
-          src={imagenMostrada}
-          sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            transition: "all 0.35s ease",
-            opacity: fade ? 1 : 0,
-            transform: fade
-              ? "translateX(0) scale(1)"
-              : `translateX(${direction * 40}px) scale(0.96)`,
-          }}
-        />
-      </Box>
+      <Grid container spacing={5} justifyContent="center" alignItems="center">
 
-      {/* MINIATURAS */}
-      {imagenes.length > 1 && (
-        <Box sx={miniaturasContainerSx}>
-          {imagenes.map((img, i) => (
+        {/* IMÁGENES */}
+        <Grid item xs={12} md={6}>
+          <Box sx={imagenWrapperSx}>
             <Box
-              key={i}
-              component="img"
-              src={img}
-              onClick={() => cambiarImagen(img, i)}
-              sx={(theme) =>
-                miniaturaSx(imagenMostrada === img, theme)
-              }
-            />
-          ))}
-        </Box>
-      )}
+              sx={{
+                ...imagenContainerSx(theme),
+                cursor: "zoom-in",
+              }}
+              onClick={() => {
+                setZoomImage(imagenMostrada);
+                setZoomOpen(true);
+              }}
+            >
+              {/* 🔥 IMAGEN CON ANIMACIÓN */}
+              <Box
+                component="img"
+                src={imagenMostrada}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  borderRadius: "12px",
+                  transition: "opacity 0.3s ease, transform 0.3s ease",
+                  opacity: fade ? 1 : 0,
+                  transform: fade ? "scale(1)" : "scale(0.97)",
+                }}
+              />
+            </Box>
 
-      {/* DETALLE */}
-      <Grid container spacing={5} justifyContent="center">
-        <Grid item xs={12} md={8}>
+            {mostrarMiniaturas && (
+              <Box sx={miniaturasContainerSx}>
+                {imagenes.map((img, i) => (
+                  <Box
+                    key={i}
+                    component="img"
+                    src={img}
+                    onClick={() => cambiarImagen(img)}
+                    sx={(theme) =>
+                      miniaturaSx(imagenMostrada === img, theme)
+                    }
+                  />
+                ))}
+              </Box>
+            )}
+          </Box>
+        </Grid>
+
+        {/* DETALLE */}
+        <Grid item xs={12} md={6}>
           <Stack spacing={3} alignItems="center">
             <Typography variant="h4" sx={tituloSx}>
               {producto.nombre}
@@ -315,4 +321,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-}
+                }
