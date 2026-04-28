@@ -1,4 +1,10 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -48,14 +54,24 @@ export default function ProductoDetalle() {
   const navigate = useNavigate();
   const theme = useTheme();
 
+  // 🔥 control anti-flash
+  const [initialized, setInitialized] = useState(false);
+
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
-  const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
+  const [varianteSeleccionada, setVarianteSeleccionada] =
+    useState(null);
   const [imagenMostrada, setImagenMostrada] = useState("");
   const [fade, setFade] = useState(true);
   const [adding, setAdding] = useState(false);
 
   const timerRef = useRef();
+
+  useEffect(() => {
+    if (producto) {
+      setInitialized(true);
+    }
+  }, [producto]);
 
   useEffect(() => {
     const handleMenuOpen = () => {
@@ -73,7 +89,24 @@ export default function ProductoDetalle() {
     window.scrollTo(0, 0);
   }, []);
 
-  if (!producto) return <Typography>Producto no encontrado</Typography>;
+  // 🔒 BLOQUEO TOTAL (anti flash)
+  if (!initialized) {
+    return (
+      <Box sx={containerSx}>
+        <Typography align="center">
+          Cargando producto...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (!producto) {
+    return (
+      <Typography align="center">
+        Producto no encontrado
+      </Typography>
+    );
+  }
 
   const tieneVariantes = producto.variantes?.length > 0;
 
@@ -208,17 +241,17 @@ export default function ProductoDetalle() {
 
             {mostrarMiniaturas && (
               <Box sx={miniaturasContainerSx}>
-                {imagenes.map((img, i) => (
-                  <Box
-                    key={i}
-                    component="img"
-                    src={img}
-                    onClick={() => cambiarImagen(img)}
-                    sx={(theme) =>
-                      miniaturaSx(imagenMostrada === img, theme)
-                    }
-                  />
-                ))}
+            {imagenes.map((img, i) => (
+  <Box
+    key={`${img}-${i}`}
+    component="img"
+    src={img}
+    onClick={() => cambiarImagen(img)}
+    sx={(theme) =>
+      miniaturaSx(imagenMostrada === img, theme)
+    }
+  />
+))}
               </Box>
             )}
           </Box>
@@ -328,4 +361,4 @@ export default function ProductoDetalle() {
       </Dialog>
     </Box>
   );
-        }
+}
