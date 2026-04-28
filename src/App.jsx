@@ -76,12 +76,12 @@ function App() {
       
       {/* 🔥 PAYPAL GLOBAL */}
       <PayPalScriptProvider
-        options={{
-          "client-id": "TU_CLIENT_ID_PAYPAL", // 👈 reemplaza
-          currency: "USD",
-          intent: "capture",
-        }}
-      >
+  options={{
+    "client-id": "AddgCeYrXYcV0KzVcPTdbGn_W4yEFhcKYPGGfBlUVWEx4p0PiSjs93o_fG_-8n8-LRBwuQqFST3LnbYt",
+    currency: "USD",
+  }}
+>
+        
         <BrowserRouter>
           <AuthProvider>
             <CarritoProvider>
