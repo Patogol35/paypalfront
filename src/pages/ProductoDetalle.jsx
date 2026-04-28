@@ -1,10 +1,4 @@
-import {
-  useState,
-  useMemo,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -54,24 +48,12 @@ export default function ProductoDetalle() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  // 🔥 control anti-flash
-  const [initialized, setInitialized] = useState(false);
-
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
-  const [varianteSeleccionada, setVarianteSeleccionada] =
-    useState(null);
-  const [imagenMostrada, setImagenMostrada] = useState("");
+  const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
+
+  // 🔥 NUEVO: animación elegante
   const [fade, setFade] = useState(true);
-  const [adding, setAdding] = useState(false);
-
-  const timerRef = useRef();
-
-  useEffect(() => {
-    if (producto) {
-      setInitialized(true);
-    }
-  }, [producto]);
 
   useEffect(() => {
     const handleMenuOpen = () => {
@@ -79,9 +61,9 @@ export default function ProductoDetalle() {
     };
 
     window.addEventListener("menuOpen", handleMenuOpen);
+
     return () => {
       window.removeEventListener("menuOpen", handleMenuOpen);
-      clearTimeout(timerRef.current);
     };
   }, []);
 
@@ -89,38 +71,16 @@ export default function ProductoDetalle() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔒 BLOQUEO TOTAL (anti flash)
-  if (!initialized) {
-    return (
-      <Box sx={containerSx}>
-        <Typography align="center">
-          Cargando producto...
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (!producto) {
-    return (
-      <Typography align="center">
-        Producto no encontrado
-      </Typography>
-    );
-  }
+  if (!producto) return <Typography>Producto no encontrado</Typography>;
 
   const tieneVariantes = producto.variantes?.length > 0;
 
-  const getImagen = useCallback((img) => {
+  const getImagen = (img) => {
     if (!img) return null;
     if (typeof img === "string") return img;
     if (typeof img === "object" && img.imagen) return img.imagen;
     return null;
-  }, []);
-
-  const variantes = useMemo(
-    () => producto.variantes || [],
-    [producto]
-  );
+  };
 
   const imagenes = useMemo(() => {
     if (varianteSeleccionada?.imagenes?.length > 0) {
@@ -132,7 +92,23 @@ export default function ProductoDetalle() {
     return [producto.imagen, ...(producto.imagenes || [])]
       .map(getImagen)
       .filter(Boolean);
-  }, [producto, varianteSeleccionada, getImagen]);
+  }, [producto, varianteSeleccionada]);
+
+  const mostrarMiniaturas = useMemo(() => {
+    if (varianteSeleccionada) {
+      return varianteSeleccionada.imagenes?.length > 1;
+    }
+
+    const totalProductoImgs = [producto.imagen, ...(producto.imagenes || [])]
+      .map(getImagen)
+      .filter(Boolean).length;
+
+    return totalProductoImgs > 1;
+  }, [producto, varianteSeleccionada]);
+
+  const [imagenMostrada, setImagenMostrada] = useState(
+    imagenes[0] || ""
+  );
 
   useEffect(() => {
     if (imagenes.length > 0) {
@@ -140,24 +116,13 @@ export default function ProductoDetalle() {
     }
   }, [imagenes]);
 
-  const mostrarMiniaturas = useMemo(() => {
-    if (varianteSeleccionada) {
-      return varianteSeleccionada.imagenes?.length > 1;
-    }
-
-    const totalImgs = [producto.imagen, ...(producto.imagenes || [])]
-      .map(getImagen)
-      .filter(Boolean).length;
-
-    return totalImgs > 1;
-  }, [producto, varianteSeleccionada, getImagen]);
-
+  // 🔥 CAMBIO CON ANIMACIÓN
   const cambiarImagen = (imgUrl) => {
     if (imgUrl === imagenMostrada) return;
 
     setFade(false);
 
-    timerRef.current = setTimeout(() => {
+    setTimeout(() => {
       setImagenMostrada(imgUrl);
       setFade(true);
     }, 150);
@@ -166,13 +131,11 @@ export default function ProductoDetalle() {
   const precioActual =
     varianteSeleccionada?.precio ?? producto.precio;
 
-  const stockTotal = tieneVariantes
-    ? variantes.reduce((acc, v) => acc + (v.stock || 0), 0)
-    : producto.stock || 0;
+  const stockTotal = producto.variantes?.length
+    ? producto.variantes.reduce((acc, v) => acc + (v.stock || 0), 0)
+    : producto.stock || 1;
 
   const handleAdd = async () => {
-    if (adding) return;
-
     if (!isAuthenticated) {
       toast.info("Inicia sesión para continuar");
       navigate("/login", { state: { from: location } });
@@ -184,8 +147,6 @@ export default function ProductoDetalle() {
       return;
     }
 
-    setAdding(true);
-
     try {
       await agregarAlCarrito(
         producto.id,
@@ -196,8 +157,6 @@ export default function ProductoDetalle() {
       toast.success(`${producto.nombre} agregado al carrito 🛒`);
     } catch (e) {
       toast.error(e.message);
-    } finally {
-      setAdding(false);
     }
   };
 
@@ -213,20 +172,24 @@ export default function ProductoDetalle() {
       </Button>
 
       <Grid container spacing={5} justifyContent="center" alignItems="center">
+
         {/* IMÁGENES */}
         <Grid item xs={12} md={6}>
           <Box sx={imagenWrapperSx}>
             <Box
-              sx={{ ...imagenContainerSx(theme), cursor: "zoom-in" }}
+              sx={{
+                ...imagenContainerSx(theme),
+                cursor: "zoom-in",
+              }}
               onClick={() => {
                 setZoomImage(imagenMostrada);
                 setZoomOpen(true);
               }}
             >
+              {/* 🔥 IMAGEN CON ANIMACIÓN */}
               <Box
                 component="img"
                 src={imagenMostrada}
-                loading="lazy"
                 sx={{
                   width: "100%",
                   height: "100%",
@@ -241,17 +204,17 @@ export default function ProductoDetalle() {
 
             {mostrarMiniaturas && (
               <Box sx={miniaturasContainerSx}>
-            {imagenes.map((img, i) => (
-  <Box
-    key={`${img}-${i}`}
-    component="img"
-    src={img}
-    onClick={() => cambiarImagen(img)}
-    sx={(theme) =>
-      miniaturaSx(imagenMostrada === img, theme)
-    }
-  />
-))}
+                {imagenes.map((img, i) => (
+                  <Box
+                    key={i}
+                    component="img"
+                    src={img}
+                    onClick={() => cambiarImagen(img)}
+                    sx={(theme) =>
+                      miniaturaSx(imagenMostrada === img, theme)
+                    }
+                  />
+                ))}
               </Box>
             )}
           </Box>
@@ -275,7 +238,7 @@ export default function ProductoDetalle() {
                 </Typography>
 
                 <Stack direction="row" sx={variantesContainerSx}>
-                  {variantes.map((v) => {
+                  {producto.variantes.map((v) => {
                     const isSelected =
                       varianteSeleccionada?.id === v.id;
 
@@ -321,11 +284,10 @@ export default function ProductoDetalle() {
               startIcon={<AddShoppingCartIcon />}
               onClick={handleAdd}
               disabled={
-                adding ||
-                (tieneVariantes
+                tieneVariantes
                   ? !varianteSeleccionada ||
                     varianteSeleccionada.stock === 0
-                  : stockTotal === 0)
+                  : stockTotal === 0
               }
               sx={botonAgregarSx(
                 tieneVariantes
@@ -333,9 +295,7 @@ export default function ProductoDetalle() {
                   : stockTotal
               )}
             >
-              {adding
-                ? "Agregando..."
-                : tieneVariantes
+              {tieneVariantes
                 ? varianteSeleccionada
                   ? varianteSeleccionada.stock > 0
                     ? "Agregar al carrito"
