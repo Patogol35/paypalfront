@@ -52,9 +52,6 @@ export default function ProductoDetalle() {
   const [zoomImage, setZoomImage] = useState("");
   const [varianteSeleccionada, setVarianteSeleccionada] = useState(null);
 
-  // 🔥 evita flash inicial
-  const [initialized, setInitialized] = useState(false);
-
   // 🔥 animación elegante
   const [fade, setFade] = useState(true);
 
@@ -71,23 +68,8 @@ export default function ProductoDetalle() {
   }, []);
 
   useEffect(() => {
-    const init = async () => {
-      window.scrollTo(0, 0);
-      setInitialized(true);
-    };
-
-    init();
+    window.scrollTo(0, 0);
   }, []);
-
-  if (!initialized) {
-    return (
-      <Box sx={containerSx}>
-        <Typography align="center">
-          Cargando producto...
-        </Typography>
-      </Box>
-    );
-  }
 
   if (!producto) {
     return (
@@ -142,6 +124,7 @@ export default function ProductoDetalle() {
     }
   }, [imagenes]);
 
+  // 🔥 cambio de imagen con animación
   const cambiarImagen = (imgUrl) => {
     if (imgUrl === imagenMostrada) return;
 
