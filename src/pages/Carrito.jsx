@@ -138,67 +138,67 @@ export default function Carrito() {
           {/* 🔥 PAYPAL BUTTON */}
           <Box sx={{ mt: 2 }}>
             <PayPalButtons
-              createOrder={async () => {
-                try {
-                  const res = await fetch(
-                    "/api/paypal/crear-orden/",
-                    {
-                      method: "POST",
-                      headers: {
-                        Authorization: `Bearer ${access}`,
-                      },
-                    }
-                  );
+  createOrder={async () => {
+    try {
+      const res = await fetch(
+        "https://paypal-karg.onrender.com/api/paypal/crear-orden/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
 
-                  const data = await res.json();
+      const data = await res.json();
 
-                  if (!res.ok) {
-                    throw new Error(data.error || "Error creando orden");
-                  }
+      if (!res.ok) {
+        throw new Error(data.error || "Error creando orden");
+      }
 
-                  return data.id;
-                } catch (err) {
-                  toast.error(err.message);
-                }
-              }}
+      return data.id;
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }}
 
-              onApprove={async (data) => {
-                try {
-                  const res = await fetch(
-                    "/api/paypal/capturar/",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${access}`,
-                      },
-                      body: JSON.stringify({
-                        orderID: data.orderID,
-                      }),
-                    }
-                  );
+  onApprove={async (data) => {
+    try {
+      const res = await fetch(
+        "https://paypal-karg.onrender.com/api/paypal/capturar/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+          body: JSON.stringify({
+            orderID: data.orderID,
+          }),
+        }
+      );
 
-                  const result = await res.json();
+      const result = await res.json();
 
-                  if (!res.ok) {
-                    throw new Error(result.error || "Error al capturar pago");
-                  }
+      if (!res.ok) {
+        throw new Error(result.error || "Error al capturar pago");
+      }
 
-                  toast.success("Pago realizado con éxito 💰");
+      toast.success("Pago realizado con éxito 💰");
 
-                  limpiarLocal();
-                  navigate("/pedidos");
+      limpiarLocal();
+      navigate("/pedidos");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }}
 
-                } catch (err) {
-                  toast.error(err.message);
-                }
-              }}
-
-              onError={(err) => {
-                console.error(err);
-                toast.error("Error con PayPal");
-              }}
-            />
+  onError={(err) => {
+    console.error(err);
+    toast.error("Error con PayPal");
+  }}
+/>
           </Box>
         </Box>
       )}
