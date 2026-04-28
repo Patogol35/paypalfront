@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 import PublicRoute from "./components/PublicRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,9 +15,6 @@ import ProductoDetalle from "./pages/ProductoDetalle";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CarritoProvider } from "./context/CarritoContext";
-
-import ProtectedRoute from "./components/ProtectedRoute";
-import Layout from "./components/Layout";
 
 
 function AppContent() {
@@ -71,13 +73,24 @@ function AppContent() {
 function App() {
   return (
     <GoogleOAuthProvider clientId="6793546722-ro4pd9ldsdrrl4l9k0jdm0pbl7f5ppu0.apps.googleusercontent.com">
-      <BrowserRouter>
-        <AuthProvider>
-          <CarritoProvider>
-            <AppContent /> 
-          </CarritoProvider>
-        </AuthProvider>
-      </BrowserRouter>
+      
+      {/* 🔥 PAYPAL GLOBAL */}
+      <PayPalScriptProvider
+        options={{
+          "client-id": "TU_CLIENT_ID_PAYPAL", // 👈 reemplaza
+          currency: "USD",
+          intent: "capture",
+        }}
+      >
+        <BrowserRouter>
+          <AuthProvider>
+            <CarritoProvider>
+              <AppContent />
+            </CarritoProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </PayPalScriptProvider>
+
     </GoogleOAuthProvider>
   );
 }
