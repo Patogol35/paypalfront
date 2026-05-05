@@ -9,7 +9,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCarrito } from "../context/CarritoContext";
 import { layoutStyles } from "./Layout.styles"; 
-
+import { useEffect } from "react";
 export default function Layout() {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -22,6 +22,42 @@ export default function Layout() {
       (acc, item) => acc + (item.cantidad || item.quantity || 0),
       0
     ) || 0;
+  useEffect(() => {
+  const handleBefore = () => {
+    const sections = document.querySelectorAll("[id]");
+    for (let sec of sections) {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+        localStorage.setItem("currentSection", sec.id);
+        break;
+      }
+    }
+  };
+
+  const handleAfter = () => {
+    const id = localStorage.getItem("currentSection");
+    if (!id) return;
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
+
+        localStorage.removeItem("currentSection");
+      }, 80);
+    });
+  };
+
+  window.addEventListener("orientationchange", handleBefore);
+  window.addEventListener("resize", handleAfter);
+
+  return () => {
+    window.removeEventListener("orientationchange", handleBefore);
+    window.removeEventListener("resize", handleAfter);
+  };
+}, []);
 
   return (
     <Box
