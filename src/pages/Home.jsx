@@ -49,20 +49,22 @@ export default function Home() {
 
   useEffect(() => {
   let scrollY = 0;
+  let timeout;
 
   const handleBefore = () => {
     scrollY = window.scrollY;
   };
 
   const handleAfter = () => {
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        window.scrollTo({
-          top: scrollY,
-          behavior: "auto",
-        });
-      }, 80);
-    });
+    clearTimeout(timeout);
+
+    // ⏳ esperamos a que React + imágenes + grid rendericen
+    timeout = setTimeout(() => {
+      window.scrollTo({
+        top: scrollY,
+        behavior: "auto",
+      });
+    }, 300); // 👈 más alto porque tienes imágenes + motion
   };
 
   window.addEventListener("orientationchange", handleBefore);
@@ -71,6 +73,7 @@ export default function Home() {
   return () => {
     window.removeEventListener("orientationchange", handleBefore);
     window.removeEventListener("resize", handleAfter);
+    clearTimeout(timeout);
   };
 }, []);
 
@@ -212,4 +215,4 @@ export default function Home() {
       />
     </>
   );
-}
+                                                                  }
