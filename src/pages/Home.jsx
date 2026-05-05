@@ -47,6 +47,33 @@ export default function Home() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }, [page]);
 
+  useEffect(() => {
+  let scrollY = 0;
+
+  const handleBefore = () => {
+    scrollY = window.scrollY;
+  };
+
+  const handleAfter = () => {
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        window.scrollTo({
+          top: scrollY,
+          behavior: "auto",
+        });
+      }, 80);
+    });
+  };
+
+  window.addEventListener("orientationchange", handleBefore);
+  window.addEventListener("resize", handleAfter);
+
+  return () => {
+    window.removeEventListener("orientationchange", handleBefore);
+    window.removeEventListener("resize", handleAfter);
+  };
+}, []);
+
   const { handleAdd } = useCarritoHandler();
 
   // FUNCIÓN CLAVE
