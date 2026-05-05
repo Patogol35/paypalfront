@@ -47,36 +47,6 @@ export default function Home() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }, [page]);
 
-  useEffect(() => {
-  let scrollY = 0;
-  let timeout;
-
-  const handleBefore = () => {
-    scrollY = window.scrollY;
-  };
-
-  const handleAfter = () => {
-    clearTimeout(timeout);
-
-    // ⏳ esperamos a que React + imágenes + grid rendericen
-    timeout = setTimeout(() => {
-      window.scrollTo({
-        top: scrollY,
-        behavior: "auto",
-      });
-    }, 300); // 👈 más alto porque tienes imágenes + motion
-  };
-
-  window.addEventListener("orientationchange", handleBefore);
-  window.addEventListener("resize", handleAfter);
-
-  return () => {
-    window.removeEventListener("orientationchange", handleBefore);
-    window.removeEventListener("resize", handleAfter);
-    clearTimeout(timeout);
-  };
-}, []);
-
   const { handleAdd } = useCarritoHandler();
 
   // FUNCIÓN CLAVE
@@ -215,4 +185,4 @@ export default function Home() {
       />
     </>
   );
-                                                                  }
+      }
